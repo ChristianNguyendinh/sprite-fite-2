@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<% if (1 < 2) { %>
+	<% include partials/head.ejs %>
+	<% } %>
+</head>
+
+<body>
+	<h1>Title</h1>
+
+	<p><%= title %></p>
+
+	<ul>
+		<% for (let i of movies) { %>
+		<li><%= i %></li>
+		<% } %>
+	</ul>
+</body>
+</html>
