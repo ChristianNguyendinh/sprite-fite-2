@@ -18,6 +18,7 @@
     "babel-core": "^6.21.0",
     "babel-loader": "^6.2.10",
     "babel-preset-react": "^6.16.0",
+    "json-loader": "^0.5.4",
     "webpack": "^1.14.0"
   }
 }

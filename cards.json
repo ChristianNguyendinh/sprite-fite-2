@@ -1,0 +1,108 @@
+{
+	"cards":[
+		{
+			"name" : "AverageJoe", 
+			"image" : "AverageJoe.jpg"
+		},
+		{
+			"name" : "BC_Macho-Macho", 
+			"image" : "BC_Macho-Macho.jpg"
+		},
+		{
+			"name" : "Clown1", 
+			"image" : "Clown1.jpg"
+		},
+		{
+			"name" : "ComputerGuy", 
+			"image" : "ComputerGuy.jpg"
+		},
+		{
+			"name" : "Dev1", 
+			"image" : "Dev1.jpg"
+		},
+		{
+			"name" : "Dev2", 
+			"image" : "Dev2.jpg"
+		},
+		{
+			"name" : "Dumpling", 
+			"image" : "Dumpling.jpg"
+		},
+		{
+			"name" : "FighterJet", 
+			"image" : "FighterJet.jpg"
+		},
+		{
+			"name" : "Heliman", 
+			"image" : "Heliman.jpg"
+		},
+		{
+			"name" : "Heliman2", 
+			"image" : "Heliman2.jpg"
+		},
+		{
+			"name" : "Jet2", 
+			"image" : "Jet2.jpg"
+		},
+		{
+			"name" : "Koala", 
+			"image" : "Koala.jpg"
+		},
+		{
+			"name" : "LeafThing", 
+			"image" : "LeafThing.jpg"
+		},
+		{
+			"name" : "LinkedList", 
+			"image" : "LinkedList.jpg"
+		},
+		{
+			"name" : "NotoriousGalamaster", 
+			"image" : "NotoriousGalamaster.jpg"
+		},
+		{
+			"name" : "OldMan", 
+			"image" : "OldMan.jpg"
+		},
+		{
+			"name" : "PolymorphicBST", 
+			"image" : "PolymorphicBST.jpg"
+		},
+		{
+			"name" : "RacoonMan", 
+			"image" : "RacoonMan.jpg"
+		},
+		{
+			"name" : "RoundhouseKick", 
+			"image" : "RoundhouseKick.jpg"
+		},
+		{
+			"name" : "SafeOpener", 
+			"image" : "SafeOpener.jpg"
+		},
+		{
+			"name" : "Slicer", 
+			"image" : "Slicer.jpg"
+		},
+		{
+			"name" : "Snake", 
+			"image" : "Snake.jpg"
+		},
+		{
+			"name" : "Tank", 
+			"image" : "Tank.jpg"
+		},
+		{
+			"name" : "TheImposter", 
+			"image" : "TheImposter.jpg"
+		},
+		{
+			"name" : "Umbrellaman", 
+			"image" : "Umbrellaman.jpg"
+		},
+		{
+			"name" : "Wombat", 
+			"image" : "Wombat.jpg"
+		}
+	]
+}
