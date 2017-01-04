@@ -5,7 +5,7 @@
 			"image" : "AverageJoe.jpg"
 		},
 		{
-			"name" : "BC_Macho-Macho", 
+			"name" : "Macho-Macho", 
 			"image" : "BC_Macho-Macho.jpg"
 		},
 		{
@@ -57,7 +57,7 @@
 			"image" : "LinkedList.jpg"
 		},
 		{
-			"name" : "NotoriousGalamaster", 
+			"name" : "Galamaster", 
 			"image" : "NotoriousGalamaster.jpg"
 		},
 		{
@@ -65,7 +65,7 @@
 			"image" : "OldMan.jpg"
 		},
 		{
-			"name" : "PolymorphicBST", 
+			"name" : "Polymorp. BST", 
 			"image" : "PolymorphicBST.jpg"
 		},
 		{
@@ -73,7 +73,7 @@
 			"image" : "RacoonMan.jpg"
 		},
 		{
-			"name" : "RoundhouseKick", 
+			"name" : "Roundhouse", 
 			"image" : "RoundhouseKick.jpg"
 		},
 		{
