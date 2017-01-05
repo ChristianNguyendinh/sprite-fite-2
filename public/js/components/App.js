@@ -1,25 +1,7 @@
 var React = require('react');
 var cardsJSON = require('../../../cards.json');
 
-var tempCards = [{
-			"name" : "AverageJoe", 
-			"image" : "AverageJoe.jpg",
-			"hp" : "10",
-			"atk" : "11"
-		},
-		{
-			"name" : "Macho-Macho", 
-			"image" : "BC_Macho-Macho.jpg",
-			"hp" : "40",
-			"atk" : "21"
-		},
-		{
-			"name" : "Clown1", 
-			"image" : "Clown1.jpg",
-			"hp" : "2",
-			"atk" : "52"
-		}];
-
+// These will live on the server eventually. Leave them as global vars for now for ease of testing
 p1Cards = [];
 p2Cards = [];
 
@@ -85,7 +67,8 @@ var CharacterSelect = React.createClass({
 			"image" : card.image,
 			"hp" : card.hp,
 			"atk" : card.atk,
-			"played": false
+			"played": false,
+			"dead": false
 		};
 		arr.push(newCard);
 	},
@@ -231,7 +214,7 @@ var CardSpot = React.createClass({
 	},
 	attack: function() {
 		if (this.props.executeAttack) {
-			this.props.executeAttack(this.state.card);
+			this.props.executeAttack(this.state.card, this.props.player);
 		}
 	},
 	unselect: function() {
@@ -252,14 +235,15 @@ var CardSpot = React.createClass({
 		} else {
 			shadow = "none";
 		}
+		var img = this.state.card && this.state.card.dead ? "images/red.jpg" : "images/white.jpg"
 		return (
 			<div onClick={this.handleClick} style={{border: "1px solid black", width: "14%", height: "100%", marginLeft: "5%", display: "inline-block", boxShadow: shadow, verticalAlign: "top"}}>
 			<center>
-				<span style={{margin: "0px"}}>{this.state.card ? this.state.card.name : ""}</span>
-				<img src={this.state.card ? "images/" + this.state.card.image : "images/white.jpg"} style={{width: "75%"}}/>
+				<span style={{margin: "0px"}}>{this.state.card && !this.state.card.dead ? this.state.card.name : ""}</span>
+				<img src={this.state.card && !this.state.card.dead ? "images/" + this.state.card.image : img} style={{width: "75%"}}/>
 				<div>
-					<span style={{margin: "0px", float: "left"}}>{this.state.card ? this.state.card.hp : ""}</span>
-					<span style={{margin: "0px", float: "right"}}>{this.state.card ? this.state.card.atk : ""}</span>
+					<span style={{margin: "0px", float: "left"}}>{this.state.card && !this.state.card.dead ? this.state.card.hp : ""}</span>
+					<span style={{margin: "0px", float: "right"}}>{this.state.card && !this.state.card.dead ? this.state.card.atk : ""}</span>
 				</div>
 			</center>
 			</div>
@@ -268,12 +252,17 @@ var CardSpot = React.createClass({
 });
 
 var GameBoard = React.createClass({
+	propTypes: {
+		changeGameState: React.PropTypes.func
+	},
 	getInitialState: function() {
 		return {
 			p1CardSelected: false,
 			p2CardSelected: false,
 			p1SpotSelected: false,
 			p2SpotSelected: false,
+			p1Deaths: 0,
+			p2Deaths: 0,
 			cardSelected: null,
 			attacker: null, 
 			helperFunc: null,
@@ -287,6 +276,8 @@ var GameBoard = React.createClass({
 				p2CardSelected: this.state.p2CardSelected,
 				p1SpotSelected: this.state.p1SpotSelected,
 				p2SpotSelected: this.state.p2SpotSelected,
+				p1Deaths: this.state.p1Deaths,
+				p2Deaths: this.state.p2Deaths,
 				cardSelected: c,
 				attacker: null,
 				helperFunc: null,
@@ -297,6 +288,8 @@ var GameBoard = React.createClass({
 				p2CardSelected: selected,
 				p1SpotSelected: this.state.p1SpotSelected,
 				p2SpotSelected: this.state.p2SpotSelected,
+				p1Deaths: this.state.p1Deaths,
+				p2Deaths: this.state.p2Deaths,
 				cardSelected: c,
 				attacker: null,
 				helperFunc: null,
@@ -313,6 +306,8 @@ var GameBoard = React.createClass({
 				p2CardSelected: this.state.p2CardSelected,
 				p1SpotSelected: !this.state.p1SpotSelected,
 				p2SpotSelected: this.state.p2SpotSelected,
+				p1Deaths: this.state.p1Deaths,
+				p2Deaths: this.state.p2Deaths,
 				cardSelected: this.state.cardSelected,
 				attacker: !this.state.p1SpotSelected ? card : null,
 				helperFunc: unselectFunc,
@@ -323,6 +318,8 @@ var GameBoard = React.createClass({
 				p2CardSelected: this.state.p2CardSelected,
 				p1SpotSelected: this.state.p1SpotSelected,
 				p2SpotSelected: !this.state.p2SpotSelected,
+				p1Deaths: this.state.p1Deaths,
+				p2Deaths: this.state.p2Deaths,
 				cardSelected: this.state.cardSelected,
 				attacker: !this.state.p2SpotSelected ? card : null,
 				helperFunc: unselectFunc,
@@ -331,10 +328,26 @@ var GameBoard = React.createClass({
 			console.log("Error showing cards for " + player);
 		}
 	},
-	attack: function(card) {
+	attack: function(card, player) {
 		if (this.state.attacker) {
 			console.log(this.state.attacker.name + " is attacking " + card.name + " for DMG: " + this.state.attacker.atk);
 			card.hp -= this.state.attacker.atk;
+			if (card.hp <= 0) {
+				card.dead = true;
+				if (player == "p1") {
+					this.state.p1Deaths++;
+					if (this.state.p1Deaths == 3) {
+						console.log("P2 WINS!!!");
+						this.props.changeGameState("p2win");
+					}
+				} else {
+					this.state.p2Deaths++;
+					if (this.state.p2Deaths == 3) {
+						console.log("P1 WINS!!!");
+						this.props.changeGameState("p1win");
+					}
+				}
+			}
 			// unselect to reset
 			this.state.helperFunc();
 			// reset for next turn
@@ -343,6 +356,8 @@ var GameBoard = React.createClass({
 				p2CardSelected: false,
 				p1SpotSelected: false,
 				p2SpotSelected: false,
+				p1Deaths: this.state.p1Deaths,
+				p2Deaths: this.state.p2Deaths,
 				cardSelected: null,
 				attacker: null,
 				helperFunc: null,
@@ -393,9 +408,28 @@ var GameBoard = React.createClass({
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 
+var WinScreen = React.createClass({
+	propTypes: {
+		player: React.PropTypes.string,
+		changeGameState: React.PropTypes.func
+	},
+	render: function() {
+		return (
+			<div style={{width: "100%", height: "100%"}}>
+				<h1>{this.props.player} WINS!!!</h1>
+			</div>
+		);
+	}
+});
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
 var App = React.createClass({
 	getInitialState: function() {
 		return {
+			// pick, game, p1win, or p2win
 			gameState: "pick"
 		};
 	},
@@ -406,13 +440,21 @@ var App = React.createClass({
 		});
 	},
 	render: function() {
+		var content
+		if (this.state.gameState == "pick")
+			content = <CharacterSelect changeGameState={this.changeGameState}/>;
+		else if (this.state.gameState == "game")
+			content = <GameBoard changeGameState={this.changeGameState}/>;
+		else if (this.state.gameState == "p1win")
+			content = <WinScreen player="p1" changeGameState={this.changeGameState}/>;
+		else if (this.state.gameState == "p2win")
+			content = <WinScreen player="p2" changeGameState={this.changeGameState}/>;
+		else
+			content = null;
+
 		return (
 			<div style={{width: "100%", height: "100%"}}>
-				{this.state.gameState == "pick" ? (
-					<CharacterSelect changeGameState={this.changeGameState}/>
-				) : (
-					<GameBoard />
-				)}
+				{content}
 			</div>
 		);
 	}
