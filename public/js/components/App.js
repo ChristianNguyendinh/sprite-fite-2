@@ -20,10 +20,14 @@ var tempCards = [{
 			"atk" : "52"
 		}];
 
+p1Cards = [];
+p2Cards = [];
+
 var CharacterTile = React.createClass({
 	propTypes: {
-		cardName: React.PropTypes.string,
-		imageLoc: React.PropTypes.string
+		card: React.PropTypes.object,
+		savec: React.PropTypes.func,
+		unsavec: React.PropTypes.func
 	},
 	getInitialState: function() {
 		return {
@@ -33,25 +37,36 @@ var CharacterTile = React.createClass({
 	},
 	handleClick: function(e) {
 		if (!this.state.isSelected) {
-			console.log(this.props.cardName + " selected.");
-			this.setState({
-				isSelected: true,
-				selectedGlow: {boxShadow: "0px 0px 30px #0f0"}
-			});
+			// Don't add if each player has already picked three cards
+			if (p1Cards.length != 3 || p2Cards.length != 3) {
+				console.log(this.props.card.name + " selected.");
+				this.setState({
+					isSelected: true,
+					selectedGlow: {boxShadow: "0px 0px 30px #0f0"}
+				}, this.sendCard);
+			}
 		} else {
-			console.log(this.props.cardName + " UNSELECTED.");
+			console.log(this.props.card.name + " UNSELECTED.");
 			this.setState({
 				isSelected: false,
 				selectedGlow: {}
-			});
+			}, this.sendCard);
+		}
+	},
+	sendCard: function() {
+		let player = p1Cards.length != 3 ? "p1" : "p2";
+		if (this.state.isSelected) {
+			this.props.savec(this.props.card, player);
+		} else {
+			this.props.unsavec(this.props.card, player);
 		}
 	},
 	render: function() {
 		return (
 			<div className="characterTile" onClick={this.handleClick} style={this.state.selectedGlow}>
 			<center>
-				<p>{this.props.cardName}</p>
-				<img src={"images/" + this.props.imageLoc} />
+				<p>{this.props.card.name}</p>
+				<img src={"images/" + this.props.card.image} />
 			</center>
 			</div>
 		);
@@ -59,15 +74,60 @@ var CharacterTile = React.createClass({
 });
 
 var CharacterSelect = React.createClass({
+	propTypes: {
+		changeGameState: React.PropTypes.func
+	},
+	saveCard: function(card, player) {
+		let arr = player == "p1" ? p1Cards : p2Cards;
+		// Copy stats over to new card to use for battle
+		let newCard = {
+			"name" : card.name, 
+			"image" : card.image,
+			"hp" : card.hp,
+			"atk" : card.atk,
+			"played": false
+		};
+		arr.push(newCard);
+	},
+	unsaveCard: function(card) {
+		// Remove the card from the player's selected card pile
+		for (let i = 0; i < p1Cards.length; i++) {
+			if (p1Cards[i].name == card.name) {
+				p1Cards.splice(i, 1);
+				return;
+			}
+		}
+		for (let i = 0; i < p2Cards.length; i++) {
+			if (p2Cards[i].name == card.name) {
+				p2Cards.splice(i, 1);
+				return;
+			}
+		}
+	},
+	handleClick: function() {
+		if (p1Cards.length == 3 && p2Cards.length == 3) {
+			this.props.changeGameState("game");
+		} else {
+			// temp error message
+			console.error("Each player needs to pick 3 cards!");
+		}
+	},
 	render: function() {
 		return (
 			<div style={{backgroundColor: "blue", width: "100%", height: "100%"}}>
 				<h1>Cards</h1>
+				<div>
+					<h3>P1 Cards</h3>
+				</div>
 				{cardsJSON['cards'].map(function(card, index) {
 					return (
-						<CharacterTile key={index} cardName={card.name} imageLoc={card.image}/>
+						<CharacterTile key={index} card={card} savec={this.saveCard} unsavec={this.unsaveCard}/>
 					);
-				})}
+				}.bind(this))}
+				<div>
+					<h3>P2 Cards</h3>
+				</div>
+				<button onClick={this.handleClick}> GO </button>
 			</div>
 		);
 	}
@@ -115,6 +175,8 @@ var Card = React.createClass({
 		}
 	},
 	render: function() {
+		if (this.props.card.played)
+			return null; // TODO: Make placing down a card unselect
 		return (
 			<div onClick={this.handleClick} style={{backgroundColor: "red", width: "10%", height: "15%", display:"inline-block", margin: "5px", float: "left", boxShadow: this.state.selectedGlow}}>
 			<center>
@@ -145,6 +207,7 @@ var CardSpot = React.createClass({
 	},
 	handleClick: function(e) {
 		if (this.props.showGlow && !this.state.filled) {
+			this.props.cardToPlace.played = true;
 			this.setState({
 				filled: true,
 				card: this.props.cardToPlace ? this.props.cardToPlace : null,
@@ -291,9 +354,9 @@ var GameBoard = React.createClass({
 	render: function() {
 		return (
 			<div style={{backgroundColor: "white", width: "100%", height: "100%", padding: "5% 8%"}}>
-				<Card card={tempCards[0]} otherSelected={this.state.p1CardSelected} showAvailable={this.showSpots} player={"p1"}/>
-				<Card card={tempCards[1]} otherSelected={this.state.p1CardSelected} showAvailable={this.showSpots} player={"p1"}/>
-				<Card card={tempCards[2]} otherSelected={this.state.p1CardSelected} showAvailable={this.showSpots} player={"p1"}/>
+				<Card card={p1Cards[0]} otherSelected={this.state.p1CardSelected} showAvailable={this.showSpots} player={"p1"}/>
+				<Card card={p1Cards[1]} otherSelected={this.state.p1CardSelected} showAvailable={this.showSpots} player={"p1"}/>
+				<Card card={p1Cards[2]} otherSelected={this.state.p1CardSelected} showAvailable={this.showSpots} player={"p1"}/>
 
 				<div style={{border: "1px dashed red", width: "90%", height: "70%", position: "relative", clear: "both"}}>
 					<div style={{border: "1px solid black", width: "100%", height: "40%", position: "absolute"}}>
@@ -317,9 +380,9 @@ var GameBoard = React.createClass({
 					</div>
 				</div>
 
-				<Card card={tempCards[0]} otherSelected={this.state.p2CardSelected} showAvailable={this.showSpots} player={"p2"}/>
-				<Card card={tempCards[1]} otherSelected={this.state.p2CardSelected} showAvailable={this.showSpots} player={"p2"}/>
-				<Card card={tempCards[2]} otherSelected={this.state.p2CardSelected} showAvailable={this.showSpots} player={"p2"}/>
+				<Card card={p2Cards[0]} otherSelected={this.state.p2CardSelected} showAvailable={this.showSpots} player={"p2"}/>
+				<Card card={p2Cards[1]} otherSelected={this.state.p2CardSelected} showAvailable={this.showSpots} player={"p2"}/>
+				<Card card={p2Cards[2]} otherSelected={this.state.p2CardSelected} showAvailable={this.showSpots} player={"p2"}/>
 
 			</div>
 		);
@@ -331,10 +394,26 @@ var GameBoard = React.createClass({
 //////////////////////////////////////////////////////////////////////////////////////////
 
 var App = React.createClass({
+	getInitialState: function() {
+		return {
+			gameState: "pick"
+		};
+	},
+	changeGameState: function(newState) {
+		console.log("Chaning game state to: " + newState);
+		this.setState({
+			gameState: newState
+		});
+	},
 	render: function() {
-		console.log(cardsJSON);
 		return (
-			<GameBoard />
+			<div style={{width: "100%", height: "100%"}}>
+				{this.state.gameState == "pick" ? (
+					<CharacterSelect changeGameState={this.changeGameState}/>
+				) : (
+					<GameBoard />
+				)}
+			</div>
 		);
 	}
 });

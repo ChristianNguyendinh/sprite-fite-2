@@ -3,7 +3,8 @@
 --------------------------------------------------------  
   
 ### TODO:  
-connect battle screen to card select  
+X connect battle screen to card select
+death  
 win conditions  
 STYLE zzz  
 hover for card info  
