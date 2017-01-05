@@ -2,107 +2,160 @@
 	"cards":[
 		{
 			"name" : "AverageJoe", 
-			"image" : "AverageJoe.jpg"
+			"image" : "AverageJoe.jpg",
+			"hp" : "10",
+			"atk" : "10"
+
 		},
 		{
 			"name" : "Macho-Macho", 
-			"image" : "BC_Macho-Macho.jpg"
+			"image" : "BC_Macho-Macho.jpg",
+			"hp" : "20",
+			"atk" : "15"
 		},
 		{
 			"name" : "Clown1", 
-			"image" : "Clown1.jpg"
+			"image" : "Clown1.jpg",
+			"hp" : "2",
+			"atk" : "30"
 		},
 		{
 			"name" : "ComputerGuy", 
-			"image" : "ComputerGuy.jpg"
+			"image" : "ComputerGuy.jpg",
+			"hp" : "2",
+			"atk" : "2"
 		},
 		{
 			"name" : "Dev1", 
-			"image" : "Dev1.jpg"
+			"image" : "Dev1.jpg",
+			"hp" : "5",
+			"atk" : "6"
 		},
 		{
 			"name" : "Dev2", 
-			"image" : "Dev2.jpg"
+			"image" : "Dev2.jpg",
+			"hp" : "6",
+			"atk" : "5"
 		},
 		{
 			"name" : "Dumpling", 
-			"image" : "Dumpling.jpg"
+			"image" : "Dumpling.jpg",
+			"hp" : "1",
+			"atk" : "1"
 		},
 		{
 			"name" : "FighterJet", 
-			"image" : "FighterJet.jpg"
+			"image" : "FighterJet.jpg",
+			"hp" : "100",
+			"atk" : "100"
 		},
 		{
 			"name" : "Heliman", 
-			"image" : "Heliman.jpg"
+			"image" : "Heliman.jpg",
+			"hp" : "50",
+			"atk" : "75"
 		},
 		{
 			"name" : "Heliman2", 
-			"image" : "Heliman2.jpg"
+			"image" : "Heliman2.jpg",
+			"hp" : "75",
+			"atk" : "50"
 		},
 		{
 			"name" : "Jet2", 
-			"image" : "Jet2.jpg"
+			"image" : "Jet2.jpg",
+			"hp" : "90",
+			"atk" : "90"
 		},
 		{
 			"name" : "Koala", 
-			"image" : "Koala.jpg"
+			"image" : "Koala.jpg",
+			"hp" : "4",
+			"atk" : "200"
 		},
 		{
 			"name" : "LeafThing", 
-			"image" : "LeafThing.jpg"
+			"image" : "LeafThing.jpg",
+			"hp" : "200",
+			"atk" : "50"
 		},
 		{
 			"name" : "LinkedList", 
-			"image" : "LinkedList.jpg"
+			"image" : "LinkedList.jpg",
+			"hp" : "500",
+			"atk" : "1"
 		},
 		{
 			"name" : "Galamaster", 
-			"image" : "NotoriousGalamaster.jpg"
+			"image" : "NotoriousGalamaster.jpg",
+			"hp" : "200",
+			"atk" : "10"
 		},
 		{
 			"name" : "OldMan", 
-			"image" : "OldMan.jpg"
+			"image" : "OldMan.jpg",
+			"hp" : "1",
+			"atk" : "100"
 		},
 		{
 			"name" : "Polymorp. BST", 
-			"image" : "PolymorphicBST.jpg"
+			"image" : "PolymorphicBST.jpg",
+			"hp" : "1",
+			"atk" : "500"
 		},
 		{
 			"name" : "RacoonMan", 
-			"image" : "RacoonMan.jpg"
+			"image" : "RacoonMan.jpg",
+			"hp" : "4",
+			"atk" : "4"
 		},
 		{
 			"name" : "Roundhouse", 
-			"image" : "RoundhouseKick.jpg"
+			"image" : "RoundhouseKick.jpg",
+			"hp" : "5",
+			"atk" : "500"
 		},
 		{
 			"name" : "SafeOpener", 
-			"image" : "SafeOpener.jpg"
+			"image" : "SafeOpener.jpg",
+			"hp" : "500",
+			"atk" : "5"
 		},
 		{
 			"name" : "Slicer", 
-			"image" : "Slicer.jpg"
+			"image" : "Slicer.jpg",
+			"hp" : "15",
+			"atk" : "5"
 		},
 		{
 			"name" : "Snake", 
-			"image" : "Snake.jpg"
+			"image" : "Snake.jpg",
+			"hp" : "5",
+			"atk" : "15"
 		},
 		{
 			"name" : "Tank", 
-			"image" : "Tank.jpg"
+			"image" : "Tank.jpg",
+			"hp" : "100",
+			"atk" : "150"
 		},
 		{
 			"name" : "TheImposter", 
-			"image" : "TheImposter.jpg"
+			"image" : "TheImposter.jpg",
+			"hp" : "7",
+			"atk" : "10"
 		},
 		{
 			"name" : "Umbrellaman", 
-			"image" : "Umbrellaman.jpg"
+			"image" : "Umbrellaman.jpg",
+			"hp" : "2",
+			"atk" : "3"
 		},
 		{
 			"name" : "Wombat", 
-			"image" : "Wombat.jpg"
+			"image" : "Wombat.jpg",
+			"hp" : "3",
+			"atk" : "2"
 		}
 	]
 }
