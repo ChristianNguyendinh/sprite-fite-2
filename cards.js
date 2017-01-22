@@ -1,4 +1,4 @@
-{
+export default {
 	"cards":[
 		{
 			"name" : "AverageJoe", 
