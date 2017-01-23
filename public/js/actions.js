@@ -5,6 +5,13 @@
 export const addCard = (card, player) => {
     return {
         type: 'ADD_CARD',
-        card
+        card: card
+    }
+}
+
+export const unAddCard = (card) => {
+    return {
+        type: 'UNADD_CARD',
+        card: card
     }
 }

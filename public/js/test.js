@@ -12,8 +12,8 @@ store.subscribe(() => {
     console.log("State Changed: ", store.getState());
 });
 
-store.dispatch({type: "ADD_CARD", card: "monster"});
-store.dispatch({type: "ADD_CARD", card: "poo"});
+//store.dispatch({type: "ADD_CARD", card: "monster"});
+//store.dispatch({type: "ADD_CARD", card: "poo"});
 
 
 ReactDOM.render(
