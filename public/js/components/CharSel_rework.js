@@ -1,9 +1,7 @@
 import React from 'react'
 import cardsJSON from '../../../cards.js'
-
-// These will live on the server eventually. Leave them as global vars for now for ease of testing
-var p1Cards = [];
-var p2Cards = [];
+import { addCard, unAddCard } from '../actions'
+import { connect } from 'react-redux'
 
 class CharacterTile extends React.Component {
     constructor(props) {
@@ -16,29 +14,26 @@ class CharacterTile extends React.Component {
 
 	handleClick(e) {
 		if (!this.state.isSelected) {
-			// Don't add if each player has already picked three cards
-			if (p1Cards.length != 3 || p2Cards.length != 3) {
+			if (!this.props.totalCards()) {
 				console.log(this.props.card.name + " selected.");
 				this.setState({
 					isSelected: true,
 					selectedGlow: {boxShadow: "0px 0px 30px #0f0"}
-				}, this.sendCard.bind(this));
+				});
+				this.props.savec(this.props.card);
+			} else {
+				console.error("Max number of cards already selected!");
 			}
 		} else {
 			console.log(this.props.card.name + " UNSELECTED!!!.");
 			this.setState({
 				isSelected: false,
 				selectedGlow: {}
-			}, this.sendCard.bind(this));
-		}
-	}
+			});
+			// Decrement the selected card count
+			this.props.totalCards(true);
 
-	sendCard() {
-		let player = p1Cards.length != 3 ? "p1" : "p2";
-		if (this.state.isSelected) {
-			this.props.savec(this.props.card, player);
-		} else {
-			this.props.unsavec(this.props.card, player);
+			this.props.unsavec(this.props.card);
 		}
 	}
 
@@ -57,48 +52,37 @@ class CharacterTile extends React.Component {
 CharacterTile.propTypes = {
     card: React.PropTypes.object,
     savec: React.PropTypes.func,
-    unsavec: React.PropTypes.func
+    unsavec: React.PropTypes.func,
+	// Whether the max number of cards have been selected
+	totalCards: React.PropTypes.func
 };
 
 class CharacterSelect extends React.Component {
-
-	saveCard(card, player) {
-		let arr = player == "p1" ? p1Cards : p2Cards;
-		// Copy stats over to new card to use for battle
-		let newCard = {
-			"name" : card.name, 
-			"image" : card.image,
-			"hp" : card.hp,
-			"atk" : card.atk,
-			"played": false,
-			"dead": false
-		};
-		arr.push(newCard);
-	}
-
-	unsaveCard(card) {
-		// Remove the card from the player's selected card pile
-		for (let i = 0; i < p1Cards.length; i++) {
-			if (p1Cards[i].name == card.name) {
-				p1Cards.splice(i, 1);
-				return;
-			}
-		}
-		for (let i = 0; i < p2Cards.length; i++) {
-			if (p2Cards[i].name == card.name) {
-				p2Cards.splice(i, 1);
-				return;
-			}
-		}
-	}
+	constructor(props) {
+		super(props);
+		this.cardsSelected = 0;
+	} 
 
 	handleClick(e) {
-		if (p1Cards.length == 3 && p2Cards.length == 3) {
-			this.props.changeGameState("game");
+		if (cardsSelected == 6) {
+			//this.props.changeGameState("game");
+			console.log("changing game state");
 		} else {
 			// temp error message
 			console.error("Each player needs to pick 3 cards!");
 		}
+	}
+
+	// Return whether or not the max has been reached, and increment
+	// or decrement the number of cards selected
+	totalCardsSelected(unselect = false) {
+		let returnValue = this.cardsSelected === 6;
+		if (!returnValue && !unselect)
+			this.cardsSelected++;
+		if (unselect)
+			this.cardsSelected--;
+		
+		return returnValue;
 	}
 
 	render() {
@@ -110,7 +94,7 @@ class CharacterSelect extends React.Component {
 				</div>
 				{cardsJSON['cards'].map(function(card, index) {
 					return (
-						<CharacterTile key={index} card={card} savec={this.saveCard} unsavec={this.unsaveCard}/>
+						<CharacterTile key={index} card={card} savec={this.props.saveCard} unsavec={this.props.unSaveCard} totalCards={this.totalCardsSelected.bind(this)}/>
 					);
 				}.bind(this))}
 				<div>
@@ -123,8 +107,28 @@ class CharacterSelect extends React.Component {
 }
 
 CharacterSelect.propTypes = {
-    changeGameState: React.PropTypes.func
+	// Cards JSON prop too, but add later
+    saveCard: React.PropTypes.func,
+	unSaveCard: React.PropTypes.func
 };
+
+// containers /////////////////////////////////
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		saveCard: (card, player) => {
+			dispatch(addCard(card))
+		},
+		unSaveCard: (card) => {
+			dispatch(unAddCard(card))
+		}
+	}
+}
+
+const CharacterSelectContainer = connect(
+	null,
+	mapDispatchToProps
+)(CharacterSelect)
 
 
 ///////////////////////////////////////////////
@@ -148,7 +152,7 @@ class Rework extends React.Component {
 	render() {
 		var content;
 		if (this.state.gameState == "pick")
-			content = <CharacterSelect changeGameState={this.changeGameState.bind(this)}/>;
+			content = <CharacterSelectContainer/>;
 		else
 			content = null;
 

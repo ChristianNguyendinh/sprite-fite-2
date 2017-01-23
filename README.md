@@ -3,6 +3,13 @@
 --------------------------------------------------------  
   
 ### TODO:  
+--- now: redux ---  
+Polish/check char select rework file  
+break into separate files  
+make submit button for char select work again  
+convert gameboard component to redux  
+  
+--- later ---  
 Move inline css to css file
 LOTS OF STYLE zzz  
 Picking phase turns, diff color for diff player  
