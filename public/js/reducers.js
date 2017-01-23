@@ -1,4 +1,5 @@
 const initialState = {
+    gameState: "pick",
     p1Cards: [],
     p2Cards: []
 }
@@ -36,6 +37,8 @@ function cardApp(state = initialState, action) {
                 else 
                     console.error("Something went terribly wrong trying to remove a card: Card not added")
             }
+        case 'CHANGE_GAME_STATE':
+            return Object.assign({}, state, {gameState: action.newGameState});
         default:
             return state;
     }

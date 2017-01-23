@@ -15,3 +15,10 @@ export const unAddCard = (card) => {
         card: card
     }
 }
+
+export const changeGameState = (newGameState) => {
+    return {
+        type: 'CHANGE_GAME_STATE',
+        newGameState: newGameState
+    }
+}

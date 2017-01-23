@@ -1,6 +1,7 @@
 import React from 'react'
 import cardsJSON from '../../../cards.js'
-import { addCard, unAddCard } from '../actions'
+import GameBoard from './Game_rework.js'
+import { addCard, unAddCard, changeGameState } from '../actions'
 import { connect } from 'react-redux'
 
 class CharacterTile extends React.Component {
@@ -64,8 +65,8 @@ class CharacterSelect extends React.Component {
 	} 
 
 	handleClick(e) {
-		if (cardsSelected == 6) {
-			//this.props.changeGameState("game");
+		if (this.cardsSelected == 6) {
+			this.props.changeGameState("game");
 			console.log("changing game state");
 		} else {
 			// temp error message
@@ -109,18 +110,22 @@ class CharacterSelect extends React.Component {
 CharacterSelect.propTypes = {
 	// Cards JSON prop too, but add later
     saveCard: React.PropTypes.func,
-	unSaveCard: React.PropTypes.func
+	unSaveCard: React.PropTypes.func,
+	changeGameState: React.PropTypes.func
 };
 
 // containers /////////////////////////////////
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		saveCard: (card, player) => {
+		saveCard: (card) => {
 			dispatch(addCard(card))
 		},
 		unSaveCard: (card) => {
 			dispatch(unAddCard(card))
+		},
+		changeGameState: (newGameState) => {
+			dispatch(changeGameState(newGameState))
 		}
 	}
 }
@@ -136,23 +141,14 @@ const CharacterSelectContainer = connect(
 class Rework extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			// pick, game, p1win, or p2win
-			gameState: "pick"
-		}
-	}
-
-	changeGameState(newState) {
-		console.log("Chaning game state to: " + newState);
-		this.setState({
-			gameState: newState
-		});
 	}
 
 	render() {
 		var content;
-		if (this.state.gameState == "pick")
-			content = <CharacterSelectContainer/>;
+		if (this.props.gameState == "pick")
+			content = <CharacterSelectContainer />;
+		else if (this.props.gameState == "game")
+			content = <GameBoard />;
 		else
 			content = null;
 
@@ -163,5 +159,9 @@ class Rework extends React.Component {
 		);
 	}
 }
+Rework.propTypes = {
+	gameState: React.PropTypes.string,
+}
+
 
 module.exports = Rework;

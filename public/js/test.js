@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Rework from './components/CharSel_rework'
+import GameContainer from './components/GameContainer'
 
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
@@ -18,6 +18,6 @@ store.subscribe(() => {
 
 ReactDOM.render(
     <Provider store = {store}>
-        <Rework />
+        <GameContainer />
     </Provider>, 
     document.getElementById('main'));
