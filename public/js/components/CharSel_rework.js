@@ -1,6 +1,7 @@
 import React from 'react'
 import cardsJSON from '../../../cards.js'
-import GameBoard from './Game_rework.js'
+import GameBoardContainer from './Game_rework.js'
+import WinScreen from './WinScreen.js'
 import { addCard, unAddCard, changeGameState } from '../actions'
 import { connect } from 'react-redux'
 
@@ -148,7 +149,11 @@ class Rework extends React.Component {
 		if (this.props.gameState == "pick")
 			content = <CharacterSelectContainer />;
 		else if (this.props.gameState == "game")
-			content = <GameBoard />;
+			content = <GameBoardContainer />;
+		else if (this.props.gameState == "p1win")
+			content = <WinScreen player="p1" />
+		else if (this.props.gameState == "p2win")
+			content = <WinScreen player="p2" />
 		else
 			content = null;
 
