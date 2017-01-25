@@ -1,8 +1,34 @@
 const initialState = {
     gameState: "pick",
     p1Cards: [],
-    p2Cards: []
+    p2Cards: [],
+    p1CardSelected: false,
+    p2CardSelected: false,
+    p1SpotSelected: false,
+    p2SpotSelected: false,
+    p1ShowAttack: false,
+    p2ShowAttack: false
 }
+
+/*
+Click cards -> show available spots -> click spot -> place card on spot -> remove card from hand -> dont show available spots
+Click spot -> if cards -> show available attacks -> if click spot avail for attack -> attack
+
+Spot Click:
+    Showing available? - place card
+    Showing other player attack? - attack card
+    Player card there? - show attack
+    Else - do nothing
+
+Spot Refresh:
+    Showing player available? - glow blue
+    Showing other player attack? - glow red
+    Else - glow nothing
+
+Card in hand click:
+    If other player not showing available spots, Show available spots
+
+*/
 
 function cardApp(state = initialState, action) {
     switch (action.type) {
@@ -39,6 +65,18 @@ function cardApp(state = initialState, action) {
             }
         case 'CHANGE_GAME_STATE':
             return Object.assign({}, state, {gameState: action.newGameState});
+        case 'P1_CARD_SELECTED':
+            return Object.assign({}, state, {p1CardSelected: action.p1CardSelected});
+        case 'P2_CARD_SELECTED':
+            return Object.assign({}, state, {p2CardSelected: action.p2CardSelected})
+        case 'P1_SPOT_SELECTED':
+            return Object.assign({}, state, {p1SpotSelected: action.p1SpotSelected});
+        case 'P2_SPOT_SELECTED':
+            return Object.assign({}, state, {p2SpotSelected: action.p2SpotSelected});  
+        case 'P1_SHOW_ATTACK':
+            return Object.assign({}, state, {p1ShowAttack: action.p1ShowAttack});
+        case 'P2_SHOW_ATTACK':
+            return Object.assign({}, state, {p2ShowAttack: action.p2ShowAttack});
         default:
             return state;
     }

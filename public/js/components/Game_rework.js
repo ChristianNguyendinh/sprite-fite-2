@@ -71,13 +71,15 @@ class CardSpot extends React.Component {
     }
 
 	handleClick(e) {
+		// Picking a spot for a card
 		if (this.props.showGlow && !this.state.filled) {
 			this.props.cardToPlace.played = true;
 			this.setState({
 				filled: true,
-				card: this.props.cardToPlace ? this.props.cardToPlace : null,
+				card: this.props.cardToPlace || null,
 				selected: false,
 			});
+		// Selecting a spot with the card in it
 		} else if (!this.props.showGlow && this.state.filled && !this.props.showTarget) {
 			this.setState({
 				filled: true,
@@ -85,6 +87,7 @@ class CardSpot extends React.Component {
 				selected: !this.state.selected,
 			}, this.getTargets.bind(this));
 			console.log(this.props.showTarget);
+		// Selecting a spot for attack
 		} else if (!this.props.showGlow && this.state.filled && this.props.showTarget) {
 			this.attack();
 		}
@@ -303,6 +306,12 @@ class GameBoard extends React.Component {
 GameBoard.propTypes = {
     p1Cards: React.PropTypes.array,
     p2Cards: React.PropTypes.array,
+	p1CardSelected: React.PropTypes.bool,
+	p2CardSelected: React.PropTypes.bool,
+	p1SpotSelected: React.PropTypes.bool,
+	p2SpotSelected: React.PropTypes.bool,
+	p1ShowAttack: React.PropTypes.bool,
+	p2ShowAttack: React.PropTypes.bool,
     changeGameState: React.PropTypes.func
 }
 
@@ -310,7 +319,13 @@ GameBoard.propTypes = {
 const mapStateToProps = (state) => {
     return {
         p1Cards: state.p1Cards,
-        p2Cards: state.p2Cards
+        p2Cards: state.p2Cards,
+		p1CardSelected: state.p1CardSelected,
+		p2CardSelected: state.p2CardSelected,
+		p1SpotSelected: state.p1SpotSelected,
+		p2SpotSelected: state.p2SpotSelected,
+		p1ShowAttack: state.p1ShowAttack,
+		p2ShowAttack: state.p2ShowAttack
     }
 }
 

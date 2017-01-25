@@ -4,10 +4,11 @@
   
 ### TODO:  
 --- now: redux ---  
-Polish/check char select rework file  
-break into separate files  
-make submit button for char select work again  
-convert gameboard component to redux  
+Convert gameboard to redux:  
+    - Use store instead of game board state  
+    - change logic for how highlighting/displaying spots/etc works  
+    - Polish card logic  
+    - Make sure we didnt break anything  
   
 --- later ---  
 Move inline css to css file
