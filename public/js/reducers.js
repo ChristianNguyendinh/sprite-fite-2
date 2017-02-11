@@ -77,6 +77,15 @@ function cardApp(state = initialState, action) {
             return Object.assign({}, state, {p1ShowAttack: action.p1ShowAttack});
         case 'P2_SHOW_ATTACK':
             return Object.assign({}, state, {p2ShowAttack: action.p2ShowAttack});
+        case 'UNSELECT':
+            return Object.assign({}, state, {
+                p1CardSelected: false,
+                p2CardSelected: false,
+                p1SpotSelected: false,
+                p2SpotSelected: false,
+                p1ShowAttack: false,
+                p2ShowAttack: false
+            });
         default:
             return state;
     }

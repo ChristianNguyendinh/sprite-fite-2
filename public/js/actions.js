@@ -64,3 +64,9 @@ export const p2ShowAttack = (bool) => {
         p2ShowAttack: bool
     }
 }
+
+export const unselect = (bool) => {
+    return {
+        type: 'UNSELECT',
+    }
+}
