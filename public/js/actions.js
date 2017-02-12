@@ -39,15 +39,15 @@ export const p2CardSelected = (bool) => {
 
 export const p1SpotSelected = (bool) => {
     return {
-        type: 'P1_CARD_SELECTED',
-        p1CardSelected: bool
+        type: 'P1_SPOT_SELECTED',
+        p1SpotSelected: bool
     }
 }
 
 export const p2SpotSelected = (bool) => {
     return {
-        type: 'P2_CARD_SELECTED',
-        p2CardSelected: bool
+        type: 'P2_SPOT_SELECTED',
+        p2SpotSelected: bool
     }
 }
 

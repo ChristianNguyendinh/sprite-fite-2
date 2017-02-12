@@ -78,6 +78,7 @@ function cardApp(state = initialState, action) {
         case 'P2_SHOW_ATTACK':
             return Object.assign({}, state, {p2ShowAttack: action.p2ShowAttack});
         case 'UNSELECT':
+            console.log("UNSELECT ASDF")
             return Object.assign({}, state, {
                 p1CardSelected: false,
                 p2CardSelected: false,
