@@ -6,11 +6,13 @@
 --- now: redux ---  
 Convert gameboard to redux:  
     - Use store instead of game board state  
-    - change logic for how highlighting/displaying spots/etc works  
-    - Polish card logic  
-    - Make sure we didnt break anything  
+        - fix unselecting highlighting  
+        - remove all non-standalone visual component state  
+        - Make sure ^^^ and store state will work with sockets  
+    - Make sure we didnt break anything - we broke everything  
   
 --- later ---  
+organization of files  
 Move inline css to css file
 LOTS OF STYLE zzz  
 Picking phase turns, diff color for diff player  
