@@ -7,12 +7,13 @@
 Convert gameboard to redux:  
     - Use store instead of game board state  
         - remove all non-standalone visual component state  
-        - make actions / reducers for attacks, p1p2 deaths, and wins??  
-    - Make sure we didnt break anything - we broke everything  
-  
---- ... ---  
-- fix unselecting highlighting 
+        - change to win state on redux state change  
+        - review and remove outdated state
+    - Make sure we didnt break anything - we broke everything - we fixed everything  
+ 
 --- later ---  
+fix unselecting highlighting 
+fix card playing highlighting  
 organization of files  
 Move inline css to css file
 LOTS OF STYLE zzz  
