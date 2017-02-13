@@ -6,7 +6,10 @@ import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import cardApp from './reducers'
 
-let store = createStore(cardApp);
+let store = createStore(
+    cardApp,
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 store.subscribe(() => {
     console.log("State Changed: ", store.getState());

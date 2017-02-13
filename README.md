@@ -6,11 +6,12 @@
 --- now: redux ---  
 Convert gameboard to redux:  
     - Use store instead of game board state  
-        - fix unselecting highlighting  
         - remove all non-standalone visual component state  
-        - Make sure ^^^ and store state will work with sockets  
+        - make actions / reducers for attacks, p1p2 deaths, and wins??  
     - Make sure we didnt break anything - we broke everything  
   
+--- ... ---  
+- fix unselecting highlighting 
 --- later ---  
 organization of files  
 Move inline css to css file

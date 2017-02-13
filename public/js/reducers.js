@@ -6,8 +6,6 @@ const initialState = {
     p2CardSelected: false,
     p1SpotSelected: false,
     p2SpotSelected: false,
-    p1ShowAttack: false,
-    p2ShowAttack: false
 }
 
 /*
@@ -31,6 +29,7 @@ Card in hand click:
 */
 
 function cardApp(state = initialState, action) {
+    let newCardsArray = [];
     switch (action.type) {
         case 'ADD_CARD': 
             // Change this for turn picking later
@@ -73,10 +72,35 @@ function cardApp(state = initialState, action) {
             return Object.assign({}, state, {p1SpotSelected: action.p1SpotSelected});
         case 'P2_SPOT_SELECTED':
             return Object.assign({}, state, {p2SpotSelected: action.p2SpotSelected});  
-        case 'P1_SHOW_ATTACK':
-            return Object.assign({}, state, {p1ShowAttack: action.p1ShowAttack});
-        case 'P2_SHOW_ATTACK':
-            return Object.assign({}, state, {p2ShowAttack: action.p2ShowAttack});
+        case 'P1_ATTACK':
+            /* REVERSED PLAYER BECAUSE PLAYER 1 IS ATTACKING PLAYER 2 */
+            newCardsArray = state.p2Cards.map(card => {
+                if (card.name == action.payload.cardName)
+                    card.hp = String(action.payload.newHp)
+                return card
+            })
+            return Object.assign({}, state, {p2Cards: newCardsArray});
+        case 'P2_ATTACK':
+            newCardsArray = state.p1Cards.map(card => {
+                if (card.name == action.payload.cardName)
+                    card.hp = String(action.payload.newHP)
+                return card
+            })
+            return Object.assign({}, state, {p1Cards: newCardsArray});
+        case 'P1_DEATH':
+            newCardsArray = state.p1Cards.map(card => {
+                if (card.name == action.cardName)
+                    card.dead = true
+                return card
+            })
+            return Object.assign({}, state, {p1Cards: newCardsArray});
+        case 'P2_DEATH':
+            newCardsArray = state.p2Cards.map(card => {
+                if (card.name == action.cardName)
+                    card.dead = true
+                return card
+            })
+            return Object.assign({}, state, {p2Cards: newCardsArray});
         case 'UNSELECT':
             console.log("UNSELECT ASDF")
             return Object.assign({}, state, {
@@ -84,8 +108,6 @@ function cardApp(state = initialState, action) {
                 p2CardSelected: false,
                 p1SpotSelected: false,
                 p2SpotSelected: false,
-                p1ShowAttack: false,
-                p2ShowAttack: false
             });
         default:
             return state;

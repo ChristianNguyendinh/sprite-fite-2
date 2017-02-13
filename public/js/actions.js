@@ -51,17 +51,37 @@ export const p2SpotSelected = (bool) => {
     }
 }
 
-export const p1ShowAttack = (bool) => {
+export const p1Attack = (name, hp) => {
     return {
-        type: 'P1_SHOW_ATTACK',
-        p1ShowAttack: bool
+        type: 'P1_ATTACK',
+        payload: {
+            cardName: name,
+            newHp: hp 
+        }
     }
 }
 
-export const p2ShowAttack = (bool) => {
+export const p2Attack = (name, hp) => {
     return {
-        type: 'P2_SHOW_ATTACK',
-        p2ShowAttack: bool
+        type: 'P2_ATTACK',
+        payload: {
+            cardName: name,
+            newHp: hp 
+        }
+    }
+}
+
+export const p1Death = (name) => {
+    return {
+        type: 'P1_DEATH',
+        cardName: name
+    }
+}
+
+export const p2Death = (name) => {
+    return {
+        type: 'P2_DEATH',
+        cardName: name
     }
 }
 

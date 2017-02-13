@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { changeGameState, p1CardSelected, p2CardSelected, p1SpotSelected, p2SpotSelected, p1ShowAttack, p2ShowAttack, unselect } from '../actions'
+import { changeGameState, p1CardSelected, p2CardSelected, p1SpotSelected, p2SpotSelected, p1Attack, p2Attack, p1Death, p2Death, unselect } from '../actions'
 
 class Card extends React.Component {
     constructor(props) {
@@ -37,7 +37,7 @@ class Card extends React.Component {
 	}
 
 	render() {
-		if (this.props.card.played)
+		if (this.props.card.played || this.props.card.dead)
 			return null; // TODO: Make placing down a card unselect
 		return (
 			<div onClick={this.handleClick.bind(this)} style={{backgroundColor: "red", width: "10%", height: "15%", display:"inline-block", margin: "5px", float: "left", boxShadow: this.state.selectedGlow}}>
@@ -86,7 +86,6 @@ class CardSpot extends React.Component {
 				card: this.state.card,
 				selected: !this.state.selected,
 			}, this.getTargets.bind(this));
-			console.log(this.props.showTarget);
 		// Selecting a spot for attack
 		} else if (!this.props.showGlow && this.state.filled && this.props.showTarget) {
 			this.attack();
@@ -101,10 +100,11 @@ class CardSpot extends React.Component {
 
 	attack() {
 		if (this.props.executeAttack) {
-			this.props.executeAttack(this.state.card, this.props.player, unselect.bind(this));
+			this.props.executeAttack(this.state.card, this.props.player);
 		}
 	}
 
+	/* DOES NOT WORK. because attack is called by the card BEING attacked, not the attacker!
 	unselect() {
 		console.log("UNSELECTING")
 		this.setState({
@@ -113,15 +113,16 @@ class CardSpot extends React.Component {
 			selected: false,
 		});
 	}
+	*/
 
 	render() {
 		var shadow;
 		if (this.props.showGlow && !this.state.filled && !this.props.showTarget) {
-			shadow = "0px 0px 30px #00f";
+			shadow = "0px 0px 30px #00f"
 		} else if (!this.props.showGlow && this.state.filled && this.state.selected) {
-			shadow = "0px 0px 30px #0f0";
+			shadow = "0px 0px 30px #0f0"
 		} else if (this.props.showTarget) {
-			shadow = "0px 0px 30px #f00";
+			shadow = "0px 0px 30px #f00"
 		} else {
 			shadow = "none";
 		}
@@ -207,25 +208,33 @@ class GameBoard extends React.Component {
 		}
 	}
 
-	attack(card, player, unselectFunc) {
+	attack(card, player) {
 		if (this.state.attacker) {
 			console.log(this.state.attacker.name + " is attacking " + card.name + " for DMG: " + this.state.attacker.atk);
 			card.hp -= this.state.attacker.atk;
 			if (card.hp <= 0) {
 				card.dead = true;
 				if (player == "p1") {
+					this.props.p1DeathFunc(card.name)
 					this.state.p1Deaths++;
 					if (this.state.p1Deaths == 3) {
 						console.log("P2 WINS!!!");
 						this.props.changeGameState("p2win");
 					}
 				} else {
+					this.props.p2DeathFunc(card.name)
 					this.state.p2Deaths++;
 					if (this.state.p2Deaths == 3) {
 						console.log("P1 WINS!!!");
 						this.props.changeGameState("p1win");
 					}
 				}
+			} else {
+				/* Reversed because the 'player' is being attacked */
+				if (player == "p1")
+					this.props.p2AttackingFunc(card.name, card.hp)
+				else
+					this.props.p1AttackingFunc(card.name, card.hp)
 			}
 			// reset for next turn
 			this.setState({
@@ -234,11 +243,11 @@ class GameBoard extends React.Component {
 				cardSelected: null,
 				attacker: null,
 			});
+			// Reset state
 			this.props.unselect();
 		} else {
 			console.log("No attacker Error!");
 		}
-		unselectFunc();
 	}
 
 	render() {
@@ -285,8 +294,6 @@ GameBoard.propTypes = {
 	p2CardSelected: React.PropTypes.bool,
 	p1SpotSelected: React.PropTypes.bool,
 	p2SpotSelected: React.PropTypes.bool,
-	p1ShowAttack: React.PropTypes.bool,
-	p2ShowAttack: React.PropTypes.bool,
 	changeGameState: React.PropTypes.func,
 	p1CardFunc: React.PropTypes.func,
 	p2CardFunc: React.PropTypes.func,
@@ -294,6 +301,8 @@ GameBoard.propTypes = {
 	p2SpotFunc: React.PropTypes.func,
 	p1AttackingFunc: React.PropTypes.func,
 	p2AttackingFunc: React.PropTypes.func,
+	p1DeathFunc: React.PropTypes.func,
+	p2DeathFunc: React.PropTypes.func,
 	unselect: React.PropTypes.func
 }
 
@@ -306,8 +315,6 @@ const mapStateToProps = (state) => {
 		p2CardSelected: state.p2CardSelected,
 		p1SpotSelected: state.p1SpotSelected,
 		p2SpotSelected: state.p2SpotSelected,
-		p1ShowAttack: state.p1ShowAttack,
-		p2ShowAttack: state.p2ShowAttack,
     }
 }
 
@@ -328,11 +335,17 @@ const mapDispatchToProps = (dispatch) => {
 		p2SpotFunc: (bool) => {
 			dispatch(p2SpotSelected(bool))
 		},
-		p1AttackingFunc: (bool) => {
-			dispatch(p1ShowAttack(bool))
+		p1AttackingFunc: (name, hp) => {
+			dispatch(p1Attack(name, hp))
 		},
-		p2AttackingFunc: (bool) => {
-			dispatch(p2ShowAttack(bool))
+		p2AttackingFunc: (name, hp) => {
+			dispatch(p2Attack(name, hp))
+		},
+		p1DeathFunc: (name) => {
+			dispatch(p1Death(name))
+		},
+		p2DeathFunc: (name) => {
+			dispatch(p2Death(name))
 		},
 		unselect: () => {
 			dispatch(unselect())
