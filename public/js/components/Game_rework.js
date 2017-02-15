@@ -121,7 +121,7 @@ class CardSpot extends React.Component {
 			shadow = "0px 0px 30px #00f"
 		} else if (!this.props.showGlow && this.state.filled && this.state.selected) {
 			shadow = "0px 0px 30px #0f0"
-		} else if (this.props.showTarget) {
+		} else if (this.props.showTarget && this.state.filled) {
 			shadow = "0px 0px 30px #f00"
 		} else {
 			shadow = "none";
@@ -155,8 +155,6 @@ class GameBoard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-			p1Deaths: 0,
-			p2Deaths: 0,
 			cardSelected: null,
 			attacker: null, 
         }
@@ -166,16 +164,12 @@ class GameBoard extends React.Component {
 		let c = selected ? card : null;
 		if (player == "p1") {
 			this.setState({
-				p1Deaths: this.state.p1Deaths,
-				p2Deaths: this.state.p2Deaths,
 				cardSelected: c,
 				attacker: null,
 			});
 			this.props.p1CardFunc(selected ? true : false);
 		} else if (player == "p2") {
 			this.setState({
-				p1Deaths: this.state.p1Deaths,
-				p2Deaths: this.state.p2Deaths,
 				cardSelected: c,
 				attacker: null,
 			});
@@ -189,16 +183,12 @@ class GameBoard extends React.Component {
 	showTargets(player, card, selected) {
 		if (player == "p1") {
 			this.setState({
-				p1Deaths: this.state.p1Deaths,
-				p2Deaths: this.state.p2Deaths,
 				cardSelected: this.state.cardSelected,
 				attacker: !this.props.p1SpotSelected ? card : null,
 			});
 			this.props.p1SpotFunc(selected ? true : false);
 		} else if (player == "p2") {
 			this.setState({
-				p1Deaths: this.state.p1Deaths,
-				p2Deaths: this.state.p2Deaths,
 				cardSelected: this.state.cardSelected,
 				attacker: !this.props.p2SpotSelected ? card : null,
 			});
@@ -214,21 +204,11 @@ class GameBoard extends React.Component {
 			card.hp -= this.state.attacker.atk;
 			if (card.hp <= 0) {
 				card.dead = true;
-				if (player == "p1") {
+				if (player == "p1")
 					this.props.p1DeathFunc(card.name)
-					this.state.p1Deaths++;
-					if (this.state.p1Deaths == 3) {
-						console.log("P2 WINS!!!");
-						this.props.changeGameState("p2win");
-					}
-				} else {
+				else 
 					this.props.p2DeathFunc(card.name)
-					this.state.p2Deaths++;
-					if (this.state.p2Deaths == 3) {
-						console.log("P1 WINS!!!");
-						this.props.changeGameState("p1win");
-					}
-				}
+
 			} else {
 				/* Reversed because the 'player' is being attacked */
 				if (player == "p1")
@@ -238,8 +218,6 @@ class GameBoard extends React.Component {
 			}
 			// reset for next turn
 			this.setState({
-				p1Deaths: this.state.p1Deaths,
-				p2Deaths: this.state.p2Deaths,
 				cardSelected: null,
 				attacker: null,
 			});

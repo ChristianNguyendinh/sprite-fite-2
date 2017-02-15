@@ -29,7 +29,10 @@ Card in hand click:
 */
 
 function cardApp(state = initialState, action) {
-    let newCardsArray = [];
+    let newCardsArray = []
+    let newGameState = ""
+    let deaths = 0
+
     switch (action.type) {
         case 'ADD_CARD': 
             // Change this for turn picking later
@@ -88,19 +91,36 @@ function cardApp(state = initialState, action) {
             })
             return Object.assign({}, state, {p1Cards: newCardsArray});
         case 'P1_DEATH':
+            deaths = 0
             newCardsArray = state.p1Cards.map(card => {
+                if (card.dead)
+                    deaths++
                 if (card.name == action.cardName)
                     card.dead = true
                 return card
             })
-            return Object.assign({}, state, {p1Cards: newCardsArray});
+            if (deaths == 3)
+                newGameState = "p2win"
+            else 
+                newGameState = state.gameState
+                
+            return Object.assign({}, state, {p1Cards: newCardsArray, gameState: newGameState});
         case 'P2_DEATH':
+            deaths = 0
             newCardsArray = state.p2Cards.map(card => {
+                if (card.dead == true)
+                    deaths++
                 if (card.name == action.cardName)
                     card.dead = true
                 return card
             })
-            return Object.assign({}, state, {p2Cards: newCardsArray});
+            // why is this three and not 2????
+            if (deaths == 3)
+                newGameState = "p1win"
+            else 
+                newGameState = state.gameState
+
+            return Object.assign({}, state, {p2Cards: newCardsArray, gameState: newGameState});
         case 'UNSELECT':
             console.log("UNSELECT ASDF")
             return Object.assign({}, state, {
