@@ -1,6 +1,8 @@
 var express = require('express');
 var path = require('path');
 var app = express();
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
 
 // using ejs cause it seems the simplest, and this wont use templating that much
 app.set('view engine', 'ejs');
@@ -16,6 +18,15 @@ app.get('/', routes.home);
 // not found
 app.get('*', routes.notFound);
 
-app.listen(3000, function() {
+// socket.io
+io.on('connection', (socket) => {
+	console.log("Socket " + socket.id + " has connected!")
+
+	socket.on('disconnect', () => {
+		console.log("Socket " + socket.id + " has disconnected...")
+	});
+});
+
+server.listen(3000, () => {
 	console.log("Server running on localhost:3000");
 });
