@@ -129,6 +129,8 @@ function cardApp(state = initialState, action) {
                 p1SpotSelected: false,
                 p2SpotSelected: false,
             });
+        case 'SOCKET_TEST':
+            return Object.assign({}, state);
         default:
             return state;
     }

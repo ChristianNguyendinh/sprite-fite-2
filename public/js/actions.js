@@ -90,3 +90,9 @@ export const unselect = (bool) => {
         type: 'UNSELECT',
     }
 }
+
+export const socketTest = () => {
+    return {
+        type: 'SOCKET_TEST',
+    }
+}

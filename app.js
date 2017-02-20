@@ -22,8 +22,13 @@ app.get('*', routes.notFound);
 io.on('connection', (socket) => {
 	console.log("Socket " + socket.id + " has connected!")
 
+	socket.on('test', (data) => {
+		console.log("test message - " + data);
+		io.emit('reply', 'this is a reply from the server');
+	});
+
 	socket.on('disconnect', () => {
-		console.log("Socket " + socket.id + " has disconnected...")
+		console.log("Socket " + socket.id + " has disconnected...");
 	});
 });
 

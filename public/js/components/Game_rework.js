@@ -27,6 +27,7 @@ class Card extends React.Component {
 				}, this.getSpots);
 			}
 		}
+		socket.emit('test', "some test data");
 	}
 
 	getSpots() {
