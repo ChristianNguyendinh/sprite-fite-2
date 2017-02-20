@@ -67,7 +67,8 @@ class CharacterSelect extends React.Component {
 
 	handleClick(e) {
 		if (this.cardsSelected == 6) {
-			this.props.changeGameState("game");
+			socket.emit('change game state', "game");
+			//this.props.changeGameState("game");
 			console.log("changing game state");
 		} else {
 			// temp error message
@@ -87,6 +88,10 @@ class CharacterSelect extends React.Component {
 		return returnValue;
 	}
 
+	cardSave(card) {
+		socket.emit('select card', card);
+	}
+
 	render() {
 		return (
 			<div style={{backgroundColor: "blue", width: "100%", height: "100%"}}>
@@ -96,7 +101,7 @@ class CharacterSelect extends React.Component {
 				</div>
 				{cardsJSON['cards'].map(function(card, index) {
 					return (
-						<CharacterTile key={index} card={card} savec={this.props.saveCard} unsavec={this.props.unSaveCard} totalCards={this.totalCardsSelected.bind(this)}/>
+						<CharacterTile key={index} card={card} savec={this.cardSave} unsavec={this.props.unSaveCard} totalCards={this.totalCardsSelected.bind(this)}/>
 					);
 				}.bind(this))}
 				<div>

@@ -20,7 +20,12 @@ store.subscribe(() => {
 
 socket.on('reply', (resp) => {
     console.log('reply: ' + resp);
-    store.dispatch({type: ""});
+    store.dispatch({type: "CHANGE_GAME_STATE", newGameState: resp});
+});
+
+socket.on('selected card', (resp) => {
+    console.log('reply: ' + resp);
+    store.dispatch({type: "ADD_CARD", card: resp});
 });
 
 ReactDOM.render(

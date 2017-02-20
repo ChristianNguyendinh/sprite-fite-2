@@ -22,9 +22,14 @@ app.get('*', routes.notFound);
 io.on('connection', (socket) => {
 	console.log("Socket " + socket.id + " has connected!")
 
-	socket.on('test', (data) => {
-		console.log("test message - " + data);
-		io.emit('reply', 'this is a reply from the server');
+	socket.on('change game state', (newState) => {
+		console.log("new state - " + newState);
+		io.emit('reply', newState);
+	});
+
+	socket.on('select card', (card) => {
+		console.log("selected a card");
+		io.emit('selected card', card);
 	});
 
 	socket.on('disconnect', () => {
