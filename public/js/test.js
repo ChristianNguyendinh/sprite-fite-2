@@ -18,14 +18,17 @@ store.subscribe(() => {
 //store.dispatch({type: "ADD_CARD", card: "monster"});
 //store.dispatch({type: "ADD_CARD", card: "poo"});
 
-socket.on('reply', (resp) => {
+socket.on('changed state', (resp) => {
     console.log('reply: ' + resp);
     store.dispatch({type: "CHANGE_GAME_STATE", newGameState: resp});
 });
 
 socket.on('selected card', (resp) => {
-    console.log('reply: ' + resp);
     store.dispatch({type: "ADD_CARD", card: resp});
+});
+
+socket.on('unselected card', (resp) => {
+    store.dispatch({type: "UNADD_CARD", card: resp});
 });
 
 ReactDOM.render(

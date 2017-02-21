@@ -2,7 +2,7 @@
 * Actions for redux
 */
 
-export const addCard = (card, player) => {
+export const addCard = (card) => {
     return {
         type: 'ADD_CARD',
         card: card
@@ -88,11 +88,5 @@ export const p2Death = (name) => {
 export const unselect = (bool) => {
     return {
         type: 'UNSELECT',
-    }
-}
-
-export const socketTest = () => {
-    return {
-        type: 'SOCKET_TEST',
     }
 }

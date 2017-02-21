@@ -5,7 +5,7 @@
 ### TODO:  
 --- now: redux ---  
 web sockets  
-    - better socket event names...  
+    - make cardsJSON live on the state. have the cards showing only show available cards in char select  
     - have char select highlighting be based on store state  
         - will prolly need to do this for the game phase as well  
     - continue web socket multiplayer stuff  

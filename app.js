@@ -24,12 +24,17 @@ io.on('connection', (socket) => {
 
 	socket.on('change game state', (newState) => {
 		console.log("new state - " + newState);
-		io.emit('reply', newState);
+		io.emit('changed state', newState);
 	});
 
 	socket.on('select card', (card) => {
 		console.log("selected a card");
 		io.emit('selected card', card);
+	});
+
+	socket.on('unselect card', (card) => {
+		console.log("unselected a card");
+		io.emit('unselected card', card);
 	});
 
 	socket.on('disconnect', () => {

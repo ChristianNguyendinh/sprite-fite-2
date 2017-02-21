@@ -1,4 +1,7 @@
+import cardsJSON from '../../cards.js'
+
 const initialState = {
+    availableCards: cardsJSON,
     gameState: "pick",
     p1Cards: [],
     p2Cards: [],
@@ -129,8 +132,6 @@ function cardApp(state = initialState, action) {
                 p1SpotSelected: false,
                 p2SpotSelected: false,
             });
-        case 'SOCKET_TEST':
-            return Object.assign({}, state);
         default:
             return state;
     }

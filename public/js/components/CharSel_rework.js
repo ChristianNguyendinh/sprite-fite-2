@@ -92,6 +92,10 @@ class CharacterSelect extends React.Component {
 		socket.emit('select card', card);
 	}
 
+	cardUnSave(card) {
+		socket.emit('unselect card', card);
+	}
+
 	render() {
 		return (
 			<div style={{backgroundColor: "blue", width: "100%", height: "100%"}}>
@@ -101,7 +105,7 @@ class CharacterSelect extends React.Component {
 				</div>
 				{cardsJSON['cards'].map(function(card, index) {
 					return (
-						<CharacterTile key={index} card={card} savec={this.cardSave} unsavec={this.props.unSaveCard} totalCards={this.totalCardsSelected.bind(this)}/>
+						<CharacterTile key={index} card={card} savec={this.cardSave} unsavec={this.cardUnSave} totalCards={this.totalCardsSelected.bind(this)}/>
 					);
 				}.bind(this))}
 				<div>
@@ -113,35 +117,6 @@ class CharacterSelect extends React.Component {
 	}
 }
 
-CharacterSelect.propTypes = {
-	// Cards JSON prop too, but add later
-    saveCard: React.PropTypes.func,
-	unSaveCard: React.PropTypes.func,
-	changeGameState: React.PropTypes.func
-};
-
-// containers /////////////////////////////////
-
-const mapDispatchToProps = (dispatch) => {
-	return {
-		saveCard: (card) => {
-			dispatch(addCard(card))
-		},
-		unSaveCard: (card) => {
-			dispatch(unAddCard(card))
-		},
-		changeGameState: (newGameState) => {
-			dispatch(changeGameState(newGameState))
-		}
-	}
-}
-
-const CharacterSelectContainer = connect(
-	null,
-	mapDispatchToProps
-)(CharacterSelect)
-
-
 ///////////////////////////////////////////////
 
 class Rework extends React.Component {
@@ -152,7 +127,7 @@ class Rework extends React.Component {
 	render() {
 		var content;
 		if (this.props.gameState == "pick")
-			content = <CharacterSelectContainer />;
+			content = <CharacterSelect />;
 		else if (this.props.gameState == "game")
 			content = <GameBoardContainer />;
 		else if (this.props.gameState == "p1win")
