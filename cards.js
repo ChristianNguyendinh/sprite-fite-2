@@ -8,13 +8,6 @@ export default {
 			"selected" : false
 		},
 		{
-			"name" : "Macho-Macho", 
-			"image" : "BC_Macho-Macho.jpg",
-			"hp" : "20",
-			"atk" : "15",
-			"selected" : false
-		},
-		{
 			"name" : "Clown1", 
 			"image" : "Clown1.jpg",
 			"hp" : "2",
@@ -54,6 +47,13 @@ export default {
 			"image" : "FighterJet.jpg",
 			"hp" : "100",
 			"atk" : "100",
+			"selected" : false
+		},
+		{
+			"name" : "Galamaster", 
+			"image" : "NotoriousGalamaster.jpg",
+			"hp" : "200",
+			"atk" : "10",
 			"selected" : false
 		},
 		{
@@ -99,10 +99,10 @@ export default {
 			"selected" : false
 		},
 		{
-			"name" : "Galamaster", 
-			"image" : "NotoriousGalamaster.jpg",
-			"hp" : "200",
-			"atk" : "10",
+			"name" : "Macho-Macho", 
+			"image" : "BC_Macho-Macho.jpg",
+			"hp" : "20",
+			"atk" : "15",
 			"selected" : false
 		},
 		{

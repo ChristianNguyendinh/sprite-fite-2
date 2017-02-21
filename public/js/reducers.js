@@ -1,7 +1,7 @@
 import cardsJSON from '../../cards.js'
 
 const initialState = {
-    availableCards: cardsJSON,
+    availableCards: cardsJSON.cards,
     gameState: "pick",
     p1Cards: [],
     p2Cards: [],
@@ -11,30 +11,11 @@ const initialState = {
     p2SpotSelected: false,
 }
 
-/*
-Click cards -> show available spots -> click spot -> place card on spot -> remove card from hand -> dont show available spots
-Click spot -> if cards -> show available attacks -> if click spot avail for attack -> attack
-
-Spot Click:
-    Showing available? - place card
-    Showing other player attack? - attack card
-    Player card there? - show attack
-    Else - do nothing
-
-Spot Refresh:
-    Showing player available? - glow blue
-    Showing other player attack? - glow red
-    Else - glow nothing
-
-Card in hand click:
-    If other player not showing available spots, Show available spots
-
-*/
-
 function cardApp(state = initialState, action) {
     let newCardsArray = []
     let newGameState = ""
     let deaths = 0
+    let avail = []
 
     switch (action.type) {
         case 'ADD_CARD': 
@@ -52,19 +33,30 @@ function cardApp(state = initialState, action) {
                 "dead": false
             };
             arr = arr.concat([newCard]);
+            avail = state.availableCards.filter(c => c.name != action.card.name);
+            console.log(avail);
             if (state.p1Cards.length != 3)
-                return Object.assign({}, state, {p1Cards: arr});
+                return Object.assign({}, state, {p1Cards: arr, availableCards: avail});
             else
-                return Object.assign({}, state, {p2Cards: arr});
+                return Object.assign({}, state, {p2Cards: arr, availableCards: avail});
         case 'UNADD_CARD':
             // Remove the card from the player's selected card pile
             let newCards = state.p1Cards.filter(card => card.name != action.card.name);
+            // add card to available pile
+            avail = []
+            for (let i = 0; i < state.availableCards.length; i++) {
+                if (action.card.name < state.availableCards[i].name) {
+                    avail = state.availableCards.slice(0, i).concat([action.card]).concat(state.availableCards.slice(i))
+                    break;
+                }
+            }
+
             if (newCards.length < state.p1Cards.length) {
-                return Object.assign({}, state, {p1Cards: newCards});
+                return Object.assign({}, state, {p1Cards: newCards, availableCards: avail});
             } else {
                 newCards = state.p2Cards.filter(card => card.name != action.card.name);
                 if (newCards.length < state.p2Cards.length) 
-                    return Object.assign({}, state, {p2Cards: newCards});
+                    return Object.assign({}, state, {p2Cards: newCards, availableCards: avail});
                 else 
                     console.error("Something went terribly wrong trying to remove a card: Card not added")
             }
