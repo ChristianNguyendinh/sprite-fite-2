@@ -1,5 +1,4 @@
 import React from 'react'
-import cardsJSON from '../../../cards.js'
 import GameBoardContainer from './Game_rework.js'
 import WinScreen from './WinScreen.js'
 import { addCard, unAddCard, changeGameState } from '../actions'
@@ -103,7 +102,7 @@ class CharacterSelect extends React.Component {
 				<div>
 					<h3>P1 Cards</h3>
 				</div>
-				{cardsJSON['cards'].map(function(card, index) {
+				{this.props.availableCards.map(function(card, index) {
 					return (
 						<CharacterTile key={index} card={card} savec={this.cardSave} unsavec={this.cardUnSave} totalCards={this.totalCardsSelected.bind(this)}/>
 					);
@@ -117,6 +116,20 @@ class CharacterSelect extends React.Component {
 	}
 }
 
+CharacterSelect.propTypes = {
+    availableCards: React.PropTypes.array
+};
+
+const mapStateToProps = (state) => {
+	return {
+		availableCards: state.availableCards
+	}
+}
+
+const CharacterSelectContainer = connect(
+	mapStateToProps
+)(CharacterSelect)
+
 ///////////////////////////////////////////////
 
 class Rework extends React.Component {
@@ -127,7 +140,7 @@ class Rework extends React.Component {
 	render() {
 		var content;
 		if (this.props.gameState == "pick")
-			content = <CharacterSelect />;
+			content = <CharacterSelectContainer />;
 		else if (this.props.gameState == "game")
 			content = <GameBoardContainer />;
 		else if (this.props.gameState == "p1win")

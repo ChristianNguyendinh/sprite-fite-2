@@ -5,7 +5,7 @@
 ### TODO:  
 --- now: redux ---  
 web sockets  
-    - make cardsJSON live on the state. have the cards showing only show available cards in char select  
+    - make cardsJSON live on the state. - use the selected prop in the card instead of deleting from available card list
     - have char select highlighting be based on store state  
         - will prolly need to do this for the game phase as well  
     - continue web socket multiplayer stuff  
