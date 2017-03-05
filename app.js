@@ -37,6 +37,10 @@ io.on('connection', (socket) => {
 		io.emit('unselected card', card);
 	});
 
+	socket.on('place card', (card, loc) => {
+		io.emit('card placed', card, loc);
+	});
+
 	socket.on('disconnect', () => {
 		console.log("Socket " + socket.id + " has disconnected...");
 	});

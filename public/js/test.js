@@ -31,6 +31,10 @@ socket.on('unselected card', (resp) => {
     store.dispatch({type: "UNADD_CARD", card: resp});
 });
 
+socket.on('card placed', (card, loc) => {
+    store.dispatch({type: "CARD_PLACED", card: card, location: loc});
+});
+
 ReactDOM.render(
     <Provider store = {store}>
         <GameContainer />

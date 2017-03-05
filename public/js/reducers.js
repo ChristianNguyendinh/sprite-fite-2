@@ -5,6 +5,8 @@ const initialState = {
     gameState: "pick",
     p1Cards: [],
     p2Cards: [],
+    p1Spots: [{}, {}, {}, {}, {}],
+    p2Spots: [{}, {}, {}, {}, {}],
     p1CardSelected: false,
     p2CardSelected: false,
     p1SpotSelected: false,
@@ -16,6 +18,7 @@ function cardApp(state = initialState, action) {
     let newGameState = ""
     let deaths = 0
     let avail = []
+    let newCard = {}
 
     switch (action.type) {
         case 'ADD_CARD': 
@@ -23,7 +26,7 @@ function cardApp(state = initialState, action) {
             let arr = state.p1Cards.length == 3 ? state.p2Cards : state.p1Cards;
             console.log(state.p1Cards.length == 3 ? "p2" : "p1");
             // Copy stats over to new card to use for battle
-            let newCard = {
+            newCard = {
                 "name" : action.card.name, 
                 "image" : action.card.image,
                 "hp" : action.card.hp,
@@ -75,6 +78,18 @@ function cardApp(state = initialState, action) {
             return Object.assign({}, state, {p1SpotSelected: action.p1SpotSelected});
         case 'P2_SPOT_SELECTED':
             return Object.assign({}, state, {p2SpotSelected: action.p2SpotSelected});  
+        case 'CARD_PLACED':
+            let newSpots = []
+            if (action.location < 5) {
+                newSpots = state.p1Spots.concat()
+                newSpots[action.location] = action.card
+                console.log(newSpots)
+                return Object.assign({}, state, {p1Spots: newSpots}); 
+            } else {
+                newSpots = state.p2Spots.concat()
+                newSpots[action.location - 5] = action.card
+                return Object.assign({}, state, {p2Spots: newSpots}); 
+            } 
         case 'P1_ATTACK':
             /* REVERSED PLAYER BECAUSE PLAYER 1 IS ATTACKING PLAYER 2 */
             newCardsArray = state.p2Cards.map(card => {

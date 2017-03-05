@@ -4,7 +4,10 @@
   
 ### TODO:  
 --- now: redux ---  
-web sockets  
+web sockets 
+    - finish connecting placing card on gameboard to multiplayer  
+    - connect attacking to multiplayer  
+    - connect players' hands to multiplayer  
     - have char select highlighting be based on store state - game state too?  
     - web socket multiplayer for the game phase  
   
@@ -22,6 +25,7 @@ web sockets
 - Separate components
 - hover for card info  
 - sound  
+- our redux is disguisting, we can definitely clean it up  
 - ***Implement specials (descriptions, death/hp loss animations, spicy stuff)  
   
 --------------------------------------------------------     

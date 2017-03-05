@@ -51,6 +51,13 @@ export const p2SpotSelected = (bool) => {
     }
 }
 
+export const placedCard = (c) => {
+    return {
+        type: 'CARD_PLACED',
+        card: c
+    }
+}
+
 export const p1Attack = (name, hp) => {
     return {
         type: 'P1_ATTACK',

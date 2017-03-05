@@ -37,6 +37,7 @@ class Card extends React.Component {
 	}
 
 	render() {
+		let shadow = this.props.card.selected ? "0px 0px 30px #0f0" : "";
 		if (this.props.card.played || this.props.card.dead)
 			return null; // TODO: Make placing down a card unselect
 		return (
@@ -79,6 +80,7 @@ class CardSpot extends React.Component {
 				card: this.props.cardToPlace || null,
 				selected: false,
 			});
+			socket.emit('place card', this.props.cardToPlace, this.props.loc)
 		// Selecting a spot with the card in it
 		} else if (!this.props.showGlow && this.state.filled && !this.props.showTarget) {
 			this.setState({
@@ -142,6 +144,7 @@ class CardSpot extends React.Component {
 	}
 }
 CardSpot.propTypes = {
+	loc: React.PropTypes.number,
     player: React.PropTypes.string,
     showGlow: React.PropTypes.bool,
     showTarget: React.PropTypes.bool,
@@ -238,21 +241,21 @@ class GameBoard extends React.Component {
 				<div style={{border: "1px dashed red", width: "90%", height: "70%", position: "relative", clear: "both"}}>
 					<div style={{border: "1px solid black", width: "100%", height: "40%", position: "absolute"}}>
 						<div style={{border: "1px dashed green", width: "90%", height: "90%", position: "absolute", top: "5%", left: "5%"}}>
-							<CardSpot cardToPlace={this.state.cardSelected} showGlow={this.props.p1CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p2SpotSelected} executeAttack={this.attack.bind(this)} player={"p1"}/>
-							<CardSpot cardToPlace={this.state.cardSelected} showGlow={this.props.p1CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p2SpotSelected} executeAttack={this.attack.bind(this)} player={"p1"}/>
-							<CardSpot cardToPlace={this.state.cardSelected} showGlow={this.props.p1CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p2SpotSelected} executeAttack={this.attack.bind(this)} player={"p1"}/>
-							<CardSpot cardToPlace={this.state.cardSelected} showGlow={this.props.p1CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p2SpotSelected} executeAttack={this.attack.bind(this)} player={"p1"}/>
-							<CardSpot cardToPlace={this.state.cardSelected} showGlow={this.props.p1CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p2SpotSelected} executeAttack={this.attack.bind(this)} player={"p1"}/>
+							<CardSpot loc={0} cardToPlace={this.state.cardSelected} showGlow={this.props.p1CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p2SpotSelected} executeAttack={this.attack.bind(this)} player={"p1"}/>
+							<CardSpot loc={1} cardToPlace={this.state.cardSelected} showGlow={this.props.p1CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p2SpotSelected} executeAttack={this.attack.bind(this)} player={"p1"}/>
+							<CardSpot loc={2} cardToPlace={this.state.cardSelected} showGlow={this.props.p1CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p2SpotSelected} executeAttack={this.attack.bind(this)} player={"p1"}/>
+							<CardSpot loc={3} cardToPlace={this.state.cardSelected} showGlow={this.props.p1CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p2SpotSelected} executeAttack={this.attack.bind(this)} player={"p1"}/>
+							<CardSpot loc={4} cardToPlace={this.state.cardSelected} showGlow={this.props.p1CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p2SpotSelected} executeAttack={this.attack.bind(this)} player={"p1"}/>
 						</div>
 					</div>
 
 					<div style={{border: "1px solid black", width: "100%", height: "40%", position: "absolute", bottom: "0px"}}>
 						<div style={{border: "1px dashed green", width: "90%", height: "90%", position: "absolute", top: "5%", left: "5%"}}>
-							<CardSpot cardToPlace={this.state.cardSelected} showGlow={this.props.p2CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p1SpotSelected} executeAttack={this.attack.bind(this)} player={"p2"} />
-							<CardSpot cardToPlace={this.state.cardSelected} showGlow={this.props.p2CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p1SpotSelected} executeAttack={this.attack.bind(this)} player={"p2"} />
-							<CardSpot cardToPlace={this.state.cardSelected} showGlow={this.props.p2CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p1SpotSelected} executeAttack={this.attack.bind(this)} player={"p2"} />
-							<CardSpot cardToPlace={this.state.cardSelected} showGlow={this.props.p2CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p1SpotSelected} executeAttack={this.attack.bind(this)} player={"p2"} />
-							<CardSpot cardToPlace={this.state.cardSelected} showGlow={this.props.p2CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p1SpotSelected} executeAttack={this.attack.bind(this)} player={"p2"} />
+							<CardSpot loc={5} cardToPlace={this.state.cardSelected} showGlow={this.props.p2CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p1SpotSelected} executeAttack={this.attack.bind(this)} player={"p2"} />
+							<CardSpot loc={6} cardToPlace={this.state.cardSelected} showGlow={this.props.p2CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p1SpotSelected} executeAttack={this.attack.bind(this)} player={"p2"} />
+							<CardSpot loc={7} cardToPlace={this.state.cardSelected} showGlow={this.props.p2CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p1SpotSelected} executeAttack={this.attack.bind(this)} player={"p2"} />
+							<CardSpot loc={8} cardToPlace={this.state.cardSelected} showGlow={this.props.p2CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p1SpotSelected} executeAttack={this.attack.bind(this)} player={"p2"} />
+							<CardSpot loc={9} cardToPlace={this.state.cardSelected} showGlow={this.props.p2CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p1SpotSelected} executeAttack={this.attack.bind(this)} player={"p2"} />
 						</div>
 					</div>
 				</div>
