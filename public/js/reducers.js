@@ -28,13 +28,18 @@ function cardApp(state = initialState, action) {
                 "image" : action.card.image,
                 "hp" : action.card.hp,
                 "atk" : action.card.atk,
-                "selected": false,
+                "selected": false, // this may be different for the char select 'selected'
                 "played": false,
                 "dead": false
             };
             arr = arr.concat([newCard]);
-            avail = state.availableCards.filter(c => c.name != action.card.name);
-            console.log(avail);
+            avail = state.availableCards.map(c => {
+                if (c.name == action.card.name) {
+                    c.selected = true
+                }
+                return c
+            });
+
             if (state.p1Cards.length != 3)
                 return Object.assign({}, state, {p1Cards: arr, availableCards: avail});
             else
@@ -44,12 +49,12 @@ function cardApp(state = initialState, action) {
             let newCards = state.p1Cards.filter(card => card.name != action.card.name);
             // add card to available pile
             avail = []
-            for (let i = 0; i < state.availableCards.length; i++) {
-                if (action.card.name < state.availableCards[i].name) {
-                    avail = state.availableCards.slice(0, i).concat([action.card]).concat(state.availableCards.slice(i))
-                    break;
+            avail = state.availableCards.map(c => {
+                if (c.name == action.card.name) {
+                    c.selected = false
                 }
-            }
+                return c
+            });
 
             if (newCards.length < state.p1Cards.length) {
                 return Object.assign({}, state, {p1Cards: newCards, availableCards: avail});

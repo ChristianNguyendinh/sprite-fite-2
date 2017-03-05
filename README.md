@@ -5,11 +5,8 @@
 ### TODO:  
 --- now: redux ---  
 web sockets  
-    - make cardsJSON live on the state. - use the selected prop in the card instead of deleting from available card list
-    - have char select highlighting be based on store state  
-        - will prolly need to do this for the game phase as well  
-    - continue web socket multiplayer stuff  
-        - state changing with each action  
+    - have char select highlighting be based on store state - game state too?  
+    - web socket multiplayer for the game phase  
   
 --- later ---  
 - favicon :)  

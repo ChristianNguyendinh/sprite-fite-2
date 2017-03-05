@@ -7,30 +7,18 @@ import { connect } from 'react-redux'
 class CharacterTile extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            isSelected: false,
-			selectedGlow: {}
-        }
     }
 
 	handleClick(e) {
-		if (!this.state.isSelected) {
+		if (!this.props.card.selected) {
 			if (!this.props.totalCards()) {
 				console.log(this.props.card.name + " selected.");
-				this.setState({
-					isSelected: true,
-					selectedGlow: {boxShadow: "0px 0px 30px #0f0"}
-				});
 				this.props.savec(this.props.card);
 			} else {
 				console.error("Max number of cards already selected!");
 			}
 		} else {
 			console.log(this.props.card.name + " UNSELECTED!!!.");
-			this.setState({
-				isSelected: false,
-				selectedGlow: {}
-			});
 			// Decrement the selected card count
 			this.props.totalCards(true);
 
@@ -39,8 +27,9 @@ class CharacterTile extends React.Component {
 	}
 
 	render() {
+		let shadow = this.props.card.selected ? "0px 0px 30px #0f0" : "";
 		return (
-			<div className="characterTile" onClick={this.handleClick.bind(this)} style={this.state.selectedGlow}>
+			<div className="characterTile" onClick={this.handleClick.bind(this)} style={{boxShadow: shadow}}>
 			<center>
 				<p>{this.props.card.name}</p>
 				<img src={"images/" + this.props.card.image} />
