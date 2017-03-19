@@ -31,6 +31,32 @@ socket.on('unselected card', (resp) => {
     store.dispatch({type: "UNADD_CARD", card: resp});
 });
 
+socket.on('p1 attack', (name, hp) => {
+    store.dispatch({type: "P1_ATTACK", 
+        payload: {
+            cardName: name,
+            newHp: hp 
+        }
+    });
+});
+
+socket.on('p2 attack', (name, hp) => {
+    store.dispatch({type: "P2_ATTACK", 
+        payload: {
+            cardName: name,
+            newHp: hp 
+        }
+    });
+});
+
+socket.on('p1 death', (name) => {
+    store.dispatch({type: "P1_DEATH", cardName: name});
+});
+
+socket.on('p2 death', (name) => {
+    store.dispatch({type: "P2_DEATH", cardName: name});
+});
+
 socket.on('card placed', (card, loc) => {
     store.dispatch({type: "CARD_PLACED", card: card, location: loc});
 });

@@ -33,12 +33,27 @@ io.on('connection', (socket) => {
 	});
 
 	socket.on('unselect card', (card) => {
-		console.log("unselected a card");
 		io.emit('unselected card', card);
 	});
 
 	socket.on('place card', (card, loc) => {
 		io.emit('card placed', card, loc);
+	});
+
+	socket.on('p1 attacking', (name, hp) => {
+		io.emit('p1 attack', name, hp);
+	});
+
+	socket.on('p2 attacking', (name, hp) => {
+		io.emit('p2 attack', name, hp);
+	});
+
+	socket.on('p1 card died', (name) => {
+		io.emit('p1 death', name);
+	});
+
+	socket.on('p2 card died', (name) => {
+		io.emit('p2 death', name);
 	});
 
 	socket.on('disconnect', () => {

@@ -5,12 +5,14 @@ const initialState = {
     gameState: "pick",
     p1Cards: [],
     p2Cards: [],
-    p1Spots: [{}, {}, {}, {}, {}],
-    p2Spots: [{}, {}, {}, {}, {}],
+    p1Spots: [null, null, null, null, null],
+    p2Spots: [null, null, null, null, null],
     p1CardSelected: false,
     p2CardSelected: false,
     p1SpotSelected: false,
     p2SpotSelected: false,
+    p1Deaths: 0,
+    p2Deaths: 0
 }
 
 function cardApp(state = initialState, action) {
@@ -83,59 +85,67 @@ function cardApp(state = initialState, action) {
             if (action.location < 5) {
                 newSpots = state.p1Spots.concat()
                 newSpots[action.location] = action.card
-                console.log(newSpots)
-                return Object.assign({}, state, {p1Spots: newSpots}); 
+                newCardsArray = state.p1Cards.concat()
+                for (let c of newCardsArray) {
+                    if (c.name == action.card.name)
+                        c.played = true;
+                }
+                return Object.assign({}, state, {p1Cards: newCardsArray, p1Spots: newSpots, p1CardSelected: false}); 
             } else {
                 newSpots = state.p2Spots.concat()
                 newSpots[action.location - 5] = action.card
-                return Object.assign({}, state, {p2Spots: newSpots}); 
+                newCardsArray = state.p2Cards.concat()
+                for (let c of newCardsArray) {
+                    if (c.name == action.card.name)
+                        c.played = true;
+                }
+                return Object.assign({}, state, {p2Cards: newCardsArray, p2Spots: newSpots, p2CardSelected: false}); 
             } 
         case 'P1_ATTACK':
             /* REVERSED PLAYER BECAUSE PLAYER 1 IS ATTACKING PLAYER 2 */
-            newCardsArray = state.p2Cards.map(card => {
-                if (card.name == action.payload.cardName)
+            newCardsArray = state.p2Spots.map(card => {
+                if (card && card.name == action.payload.cardName)
                     card.hp = String(action.payload.newHp)
                 return card
             })
-            return Object.assign({}, state, {p2Cards: newCardsArray});
+            return Object.assign({}, state, {p2Spots: newCardsArray});
         case 'P2_ATTACK':
-            newCardsArray = state.p1Cards.map(card => {
-                if (card.name == action.payload.cardName)
-                    card.hp = String(action.payload.newHP)
+            newCardsArray = state.p1Spots.map(card => {
+                if (card && card.name == action.payload.cardName)
+                    card.hp = String(action.payload.newHp)
                 return card
             })
-            return Object.assign({}, state, {p1Cards: newCardsArray});
+            return Object.assign({}, state, {p1Spots: newCardsArray});
         case 'P1_DEATH':
-            deaths = 0
-            newCardsArray = state.p1Cards.map(card => {
-                if (card.dead)
-                    deaths++
-                if (card.name == action.cardName)
-                    card.dead = true
+            newCardsArray = state.p1Spots.map(card => {
+                if (card) {
+                    if (card.name == action.cardName)
+                        card.dead = true
+                }
                 return card
-            })
-            if (deaths == 3)
+            });
+            state.p1Deaths++;
+            if (state.p1Deaths == 3)
                 newGameState = "p2win"
             else 
                 newGameState = state.gameState
                 
-            return Object.assign({}, state, {p1Cards: newCardsArray, gameState: newGameState});
+            return Object.assign({}, state, {p1Spots: newCardsArray, gameState: newGameState});
         case 'P2_DEATH':
-            deaths = 0
-            newCardsArray = state.p2Cards.map(card => {
-                if (card.dead == true)
-                    deaths++
-                if (card.name == action.cardName)
-                    card.dead = true
+            newCardsArray = state.p2Spots.map(card => {
+                if (card) {
+                    if (card.name == action.cardName)
+                        card.dead = true
+                }
                 return card
             })
-            // why is this three and not 2????
-            if (deaths == 3)
+            state.p2Deaths++;
+            if (state.p2Deaths == 3)
                 newGameState = "p1win"
             else 
                 newGameState = state.gameState
 
-            return Object.assign({}, state, {p2Cards: newCardsArray, gameState: newGameState});
+            return Object.assign({}, state, {p2Spots: newCardsArray, gameState: newGameState});
         case 'UNSELECT':
             console.log("UNSELECT ASDF")
             return Object.assign({}, state, {

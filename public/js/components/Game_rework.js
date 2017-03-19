@@ -65,44 +65,37 @@ class CardSpot extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            filled: false,
-			card: null,
 			selected: false
         }
     }
 
 	handleClick(e) {
 		// Picking a spot for a card
-		if (this.props.showGlow && !this.state.filled) {
-			this.props.cardToPlace.played = true;
+		if (this.props.showGlow && !this.props.card) {
 			this.setState({
-				filled: true,
-				card: this.props.cardToPlace || null,
 				selected: false,
 			});
 			socket.emit('place card', this.props.cardToPlace, this.props.loc)
 		// Selecting a spot with the card in it
-		} else if (!this.props.showGlow && this.state.filled && !this.props.showTarget) {
+		} else if (!this.props.showGlow && this.props.card && !this.props.showTarget) {
 			this.setState({
-				filled: true,
-				card: this.state.card,
 				selected: !this.state.selected,
 			}, this.getTargets.bind(this));
 		// Selecting a spot for attack
-		} else if (!this.props.showGlow && this.state.filled && this.props.showTarget) {
+		} else if (!this.props.showGlow && this.props.card && this.props.showTarget) {
 			this.attack();
 		}
 	}
 
 	getTargets() {
 		if (this.props.getTarget) {
-			this.props.getTarget(this.props.player, this.state.card, this.state.selected);
+			this.props.getTarget(this.props.player, this.props.card, this.state.selected);
 		}
 	}
 
 	attack() {
 		if (this.props.executeAttack) {
-			this.props.executeAttack(this.state.card, this.props.player);
+			this.props.executeAttack(this.props.card, this.props.player);
 		}
 	}
 
@@ -119,24 +112,24 @@ class CardSpot extends React.Component {
 
 	render() {
 		var shadow;
-		if (this.props.showGlow && !this.state.filled && !this.props.showTarget) {
+		if (this.props.showGlow && !this.props.card && !this.props.showTarget) {
 			shadow = "0px 0px 30px #00f"
-		} else if (!this.props.showGlow && this.state.filled && this.state.selected) {
+		} else if (!this.props.showGlow && this.props.card && this.state.selected) {
 			shadow = "0px 0px 30px #0f0"
-		} else if (this.props.showTarget && this.state.filled) {
+		} else if (this.props.showTarget && this.props.card && !this.props.card.dead) {
 			shadow = "0px 0px 30px #f00"
 		} else {
 			shadow = "none";
 		}
-		var img = this.state.card && this.state.card.dead ? "images/red.jpg" : "images/white.jpg"
+		var img = this.props.card && this.props.card.dead ? "images/red.jpg" : "images/white.jpg"
 		return (
 			<div onClick={this.handleClick.bind(this)} style={{border: "1px solid black", width: "14%", height: "100%", marginLeft: "5%", display: "inline-block", boxShadow: shadow, verticalAlign: "top"}}>
 			<center>
-				<span style={{margin: "0px"}}>{this.state.card && !this.state.card.dead ? this.state.card.name : ""}</span>
-				<img src={this.state.card && !this.state.card.dead ? "images/" + this.state.card.image : img} style={{width: "75%"}}/>
+				<span style={{margin: "0px"}}>{this.props.card && !this.props.card.dead ? this.props.card.name : ""}</span>
+				<img src={this.props.card && !this.props.card.dead ? "images/" + this.props.card.image : img} style={{width: "75%"}}/>
 				<div>
-					<span style={{margin: "0px", float: "left"}}>{this.state.card && !this.state.card.dead ? this.state.card.hp : ""}</span>
-					<span style={{margin: "0px", float: "right"}}>{this.state.card && !this.state.card.dead ? this.state.card.atk : ""}</span>
+					<span style={{margin: "0px", float: "left"}}>{this.props.card && !this.props.card.dead ? this.props.card.hp : ""}</span>
+					<span style={{margin: "0px", float: "right"}}>{this.props.card && !this.props.card.dead ? this.props.card.atk : ""}</span>
 				</div>
 			</center>
 			</div>
@@ -147,6 +140,7 @@ CardSpot.propTypes = {
 	loc: React.PropTypes.number,
     player: React.PropTypes.string,
     showGlow: React.PropTypes.bool,
+	card: React.PropTypes.object,
     showTarget: React.PropTypes.bool,
     cardToPlace: React.PropTypes.object,
     getTarget: React.PropTypes.func,
@@ -208,16 +202,16 @@ class GameBoard extends React.Component {
 			if (card.hp <= 0) {
 				card.dead = true;
 				if (player == "p1")
-					this.props.p1DeathFunc(card.name)
+					socket.emit("p1 card died", card.name); //this.props.p1DeathFunc(card.name)
 				else 
-					this.props.p2DeathFunc(card.name)
+					socket.emit("p2 card died", card.name); //this.props.p2DeathFunc(card.name)
 
 			} else {
 				/* Reversed because the 'player' is being attacked */
 				if (player == "p1")
-					this.props.p2AttackingFunc(card.name, card.hp)
+					socket.emit("p2 attacking", card.name, card.hp);
 				else
-					this.props.p1AttackingFunc(card.name, card.hp)
+					socket.emit("p1 attacking", card.name, card.hp);
 			}
 			// reset for next turn
 			this.setState({
@@ -241,21 +235,21 @@ class GameBoard extends React.Component {
 				<div style={{border: "1px dashed red", width: "90%", height: "70%", position: "relative", clear: "both"}}>
 					<div style={{border: "1px solid black", width: "100%", height: "40%", position: "absolute"}}>
 						<div style={{border: "1px dashed green", width: "90%", height: "90%", position: "absolute", top: "5%", left: "5%"}}>
-							<CardSpot loc={0} cardToPlace={this.state.cardSelected} showGlow={this.props.p1CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p2SpotSelected} executeAttack={this.attack.bind(this)} player={"p1"}/>
-							<CardSpot loc={1} cardToPlace={this.state.cardSelected} showGlow={this.props.p1CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p2SpotSelected} executeAttack={this.attack.bind(this)} player={"p1"}/>
-							<CardSpot loc={2} cardToPlace={this.state.cardSelected} showGlow={this.props.p1CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p2SpotSelected} executeAttack={this.attack.bind(this)} player={"p1"}/>
-							<CardSpot loc={3} cardToPlace={this.state.cardSelected} showGlow={this.props.p1CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p2SpotSelected} executeAttack={this.attack.bind(this)} player={"p1"}/>
-							<CardSpot loc={4} cardToPlace={this.state.cardSelected} showGlow={this.props.p1CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p2SpotSelected} executeAttack={this.attack.bind(this)} player={"p1"}/>
+							<CardSpot loc={0} cardToPlace={this.state.cardSelected} showGlow={this.props.p1CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p2SpotSelected} executeAttack={this.attack.bind(this)} card={this.props.p1Spots[0]} player={"p1"}/>
+							<CardSpot loc={1} cardToPlace={this.state.cardSelected} showGlow={this.props.p1CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p2SpotSelected} executeAttack={this.attack.bind(this)} card={this.props.p1Spots[1]} player={"p1"}/>
+							<CardSpot loc={2} cardToPlace={this.state.cardSelected} showGlow={this.props.p1CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p2SpotSelected} executeAttack={this.attack.bind(this)} card={this.props.p1Spots[2]} player={"p1"}/>
+							<CardSpot loc={3} cardToPlace={this.state.cardSelected} showGlow={this.props.p1CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p2SpotSelected} executeAttack={this.attack.bind(this)} card={this.props.p1Spots[3]} player={"p1"}/>
+							<CardSpot loc={4} cardToPlace={this.state.cardSelected} showGlow={this.props.p1CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p2SpotSelected} executeAttack={this.attack.bind(this)} card={this.props.p1Spots[4]} player={"p1"}/>
 						</div>
 					</div>
 
 					<div style={{border: "1px solid black", width: "100%", height: "40%", position: "absolute", bottom: "0px"}}>
 						<div style={{border: "1px dashed green", width: "90%", height: "90%", position: "absolute", top: "5%", left: "5%"}}>
-							<CardSpot loc={5} cardToPlace={this.state.cardSelected} showGlow={this.props.p2CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p1SpotSelected} executeAttack={this.attack.bind(this)} player={"p2"} />
-							<CardSpot loc={6} cardToPlace={this.state.cardSelected} showGlow={this.props.p2CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p1SpotSelected} executeAttack={this.attack.bind(this)} player={"p2"} />
-							<CardSpot loc={7} cardToPlace={this.state.cardSelected} showGlow={this.props.p2CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p1SpotSelected} executeAttack={this.attack.bind(this)} player={"p2"} />
-							<CardSpot loc={8} cardToPlace={this.state.cardSelected} showGlow={this.props.p2CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p1SpotSelected} executeAttack={this.attack.bind(this)} player={"p2"} />
-							<CardSpot loc={9} cardToPlace={this.state.cardSelected} showGlow={this.props.p2CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p1SpotSelected} executeAttack={this.attack.bind(this)} player={"p2"} />
+							<CardSpot loc={5} cardToPlace={this.state.cardSelected} showGlow={this.props.p2CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p1SpotSelected} executeAttack={this.attack.bind(this)} card={this.props.p2Spots[0]} player={"p2"} />
+							<CardSpot loc={6} cardToPlace={this.state.cardSelected} showGlow={this.props.p2CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p1SpotSelected} executeAttack={this.attack.bind(this)} card={this.props.p2Spots[1]} player={"p2"} />
+							<CardSpot loc={7} cardToPlace={this.state.cardSelected} showGlow={this.props.p2CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p1SpotSelected} executeAttack={this.attack.bind(this)} card={this.props.p2Spots[2]} player={"p2"} />
+							<CardSpot loc={8} cardToPlace={this.state.cardSelected} showGlow={this.props.p2CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p1SpotSelected} executeAttack={this.attack.bind(this)} card={this.props.p2Spots[3]} player={"p2"} />
+							<CardSpot loc={9} cardToPlace={this.state.cardSelected} showGlow={this.props.p2CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p1SpotSelected} executeAttack={this.attack.bind(this)} card={this.props.p2Spots[4]} player={"p2"} />
 						</div>
 					</div>
 				</div>
@@ -280,6 +274,8 @@ GameBoard.propTypes = {
 	p2CardFunc: React.PropTypes.func,
 	p1SpotFunc: React.PropTypes.func,
 	p2SpotFunc: React.PropTypes.func,
+	p1Spots: React.PropTypes.array,
+	p2Spots: React.PropTypes.array,
 	p1AttackingFunc: React.PropTypes.func,
 	p2AttackingFunc: React.PropTypes.func,
 	p1DeathFunc: React.PropTypes.func,
@@ -296,6 +292,8 @@ const mapStateToProps = (state) => {
 		p2CardSelected: state.p2CardSelected,
 		p1SpotSelected: state.p1SpotSelected,
 		p2SpotSelected: state.p2SpotSelected,
+		p1Spots: state.p1Spots,
+		p2Spots: state.p2Spots
     }
 }
 
