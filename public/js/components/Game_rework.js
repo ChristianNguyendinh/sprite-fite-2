@@ -227,7 +227,7 @@ class GameBoard extends React.Component {
 
 	render() {
 		return (
-			<div style={{backgroundColor: "white", width: "100%", height: "100%", padding: "5% 8%"}}>
+			<div style={{width: "100%", height: "100%", padding: "5% 8%"}}>
 				<Card card={this.props.p1Cards[0]} otherSelected={this.props.p1CardSelected} showAvailable={this.showSpots.bind(this)} player={"p1"}/>
 				<Card card={this.props.p1Cards[1]} otherSelected={this.props.p1CardSelected} showAvailable={this.showSpots.bind(this)} player={"p1"}/>
 				<Card card={this.props.p1Cards[2]} otherSelected={this.props.p1CardSelected} showAvailable={this.showSpots.bind(this)} player={"p1"}/>

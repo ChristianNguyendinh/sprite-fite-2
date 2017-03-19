@@ -86,7 +86,7 @@ class CharacterSelect extends React.Component {
 
 	render() {
 		return (
-			<div style={{backgroundColor: "blue", width: "100%", height: "100%"}}>
+			<div style={{width: "100%", height: "100%"}}>
 				<h1>Cards</h1>
 				<div>
 					<h3>P1 Cards</h3>
@@ -99,7 +99,7 @@ class CharacterSelect extends React.Component {
 				<div>
 					<h3>P2 Cards</h3>
 				</div>
-				<button onClick={this.handleClick.bind(this)}> GO </button>
+				<button style={{paddingBottom: "3%"}} onClick={this.handleClick.bind(this)}> GO </button>
 			</div>
 		);
 	}
