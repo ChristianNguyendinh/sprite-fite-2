@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import GameContainer from './components/GameContainer';
+import SpriteFiteContainer from './components/SpriteFiteContainer';
 
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
@@ -62,6 +62,6 @@ socket.on('card placed', (card, loc) => {
 
 ReactDOM.render(
     <Provider store = {store}>
-        <GameContainer />
+        <SpriteFiteContainer />
     </Provider>, 
     document.getElementById('main'));

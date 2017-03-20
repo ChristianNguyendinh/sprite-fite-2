@@ -1,4 +1,4 @@
-import Rework from './CharSel_rework.js'
+import SpriteFite from './SpriteFite.js'
 import { connect } from 'react-redux'
 
 const mapStateToProps = (state) => {
@@ -18,9 +18,9 @@ const mapDispatchToProps = (dispatch) => {
 	}
 }
 
-const GameContainer = connect(
+const SpriteFiteContainer = connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(Rework)
+)(SpriteFite)
 
-module.exports = GameContainer;
+module.exports = SpriteFiteContainer;

@@ -1,6 +1,6 @@
 module.exports = {
 	entry: {
-		test: __dirname + '/public/js/test.js'
+		test: __dirname + '/public/js/main.js'
 	},
 	module: {
 		loaders: [
