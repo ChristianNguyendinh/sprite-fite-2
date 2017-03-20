@@ -11,12 +11,11 @@ let store = createStore(
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
+/*
 store.subscribe(() => {
     console.log("State Changed: ", store.getState());
 });
-
-//store.dispatch({type: "ADD_CARD", card: "monster"});
-//store.dispatch({type: "ADD_CARD", card: "poo"});
+*/
 
 socket.on('changed state', (resp) => {
     console.log('reply: ' + resp);

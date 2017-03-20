@@ -146,14 +146,6 @@ function cardApp(state = initialState, action) {
                 newGameState = state.gameState
 
             return Object.assign({}, state, {p2Spots: newCardsArray, gameState: newGameState});
-        case 'UNSELECT':
-            console.log("UNSELECT ASDF")
-            return Object.assign({}, state, {
-                p1CardSelected: false,
-                p2CardSelected: false,
-                p1SpotSelected: false,
-                p2SpotSelected: false,
-            });
         default:
             return state;
     }

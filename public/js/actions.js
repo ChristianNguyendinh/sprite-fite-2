@@ -91,9 +91,3 @@ export const p2Death = (name) => {
         cardName: name
     }
 }
-
-export const unselect = (bool) => {
-    return {
-        type: 'UNSELECT',
-    }
-}
