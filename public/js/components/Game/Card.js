@@ -40,12 +40,12 @@ class Card extends React.Component {
 		if (this.props.card.played || this.props.card.dead)
 			return null;
 		return (
-			<div onClick={this.handleClick.bind(this)} style={{backgroundColor: "red", width: "10%", height: "15%", display:"inline-block", margin: "5px", float: "left", boxShadow: this.state.selectedGlow}}>
+			<div className="card" onClick={this.handleClick.bind(this)} style={{boxShadow: this.state.selectedGlow}}>
 			<center>
-				<p style={{margin: "0px"}}>{this.props.card ? this.props.card.name : "NULL"}</p>
-				<img src={this.props.card ? "images/" + this.props.card.image : ""} style={{width: "75%", display: "block"}}/>
-				<p style={{margin: "0px", float: "left"}}>{this.props.card ? this.props.card.hp : ""}</p>
-				<p style={{margin: "0px", float: "right"}}>{this.props.card ? this.props.card.atk : ""}</p>
+				<p className="card-name">{this.props.card ? this.props.card.name : "NULL"}</p>
+				<img src={this.props.card ? "images/" + this.props.card.image : ""} className="card-img"/>
+				<p className="card-hp">{this.props.card ? this.props.card.hp : ""}</p>
+				<p className="card-atk">{this.props.card ? this.props.card.atk : ""}</p>
 			</center>
 			</div>
 		);

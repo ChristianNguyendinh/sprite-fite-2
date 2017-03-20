@@ -81,14 +81,14 @@ class GameBoard extends React.Component {
 
 	render() {
 		return (
-			<div style={{width: "100%", height: "100%", padding: "5% 8%"}}>
+			<div id="game-board-div">
 				<Card card={this.props.p1Cards[0]} otherSelected={this.props.p1CardSelected} showAvailable={this.showSpots.bind(this)} player={"p1"}/>
 				<Card card={this.props.p1Cards[1]} otherSelected={this.props.p1CardSelected} showAvailable={this.showSpots.bind(this)} player={"p1"}/>
 				<Card card={this.props.p1Cards[2]} otherSelected={this.props.p1CardSelected} showAvailable={this.showSpots.bind(this)} player={"p1"}/>
 
-				<div style={{border: "1px dashed red", width: "90%", height: "70%", position: "relative", clear: "both"}}>
-					<div style={{border: "1px solid black", width: "100%", height: "40%", position: "absolute"}}>
-						<div style={{border: "1px dashed green", width: "90%", height: "90%", position: "absolute", top: "5%", left: "5%"}}>
+				<div id="card-spot-div">
+					<div id="p1-card-spot-div">
+						<div id="p1-card-spots">
 							<CardSpot loc={0} cardToPlace={this.state.cardSelected} showGlow={this.props.p1CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p2SpotSelected} executeAttack={this.attack.bind(this)} card={this.props.p1Spots[0]} player={"p1"}/>
 							<CardSpot loc={1} cardToPlace={this.state.cardSelected} showGlow={this.props.p1CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p2SpotSelected} executeAttack={this.attack.bind(this)} card={this.props.p1Spots[1]} player={"p1"}/>
 							<CardSpot loc={2} cardToPlace={this.state.cardSelected} showGlow={this.props.p1CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p2SpotSelected} executeAttack={this.attack.bind(this)} card={this.props.p1Spots[2]} player={"p1"}/>
@@ -97,8 +97,8 @@ class GameBoard extends React.Component {
 						</div>
 					</div>
 
-					<div style={{border: "1px solid black", width: "100%", height: "40%", position: "absolute", bottom: "0px"}}>
-						<div style={{border: "1px dashed green", width: "90%", height: "90%", position: "absolute", top: "5%", left: "5%"}}>
+					<div id="p2-card-spot-div">
+						<div id="p2-card-spots">
 							<CardSpot loc={5} cardToPlace={this.state.cardSelected} showGlow={this.props.p2CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p1SpotSelected} executeAttack={this.attack.bind(this)} card={this.props.p2Spots[0]} player={"p2"} />
 							<CardSpot loc={6} cardToPlace={this.state.cardSelected} showGlow={this.props.p2CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p1SpotSelected} executeAttack={this.attack.bind(this)} card={this.props.p2Spots[1]} player={"p2"} />
 							<CardSpot loc={7} cardToPlace={this.state.cardSelected} showGlow={this.props.p2CardSelected} getTarget={this.showTargets.bind(this)} showTarget={this.props.p1SpotSelected} executeAttack={this.attack.bind(this)} card={this.props.p2Spots[2]} player={"p2"} />

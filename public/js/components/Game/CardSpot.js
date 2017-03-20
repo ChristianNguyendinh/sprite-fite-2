@@ -52,13 +52,13 @@ class CardSpot extends React.Component {
 		}
 		var img = this.props.card && this.props.card.dead ? "images/red.jpg" : "images/white.jpg"
 		return (
-			<div onClick={this.handleClick.bind(this)} style={{border: "1px solid black", width: "14%", height: "100%", marginLeft: "5%", display: "inline-block", boxShadow: shadow, verticalAlign: "top"}}>
+			<div className="card-spot" onClick={this.handleClick.bind(this)} style={{boxShadow: shadow}}>
 			<center>
-				<span style={{margin: "0px"}}>{this.props.card && !this.props.card.dead ? this.props.card.name : ""}</span>
-				<img src={this.props.card && !this.props.card.dead ? "images/" + this.props.card.image : img} style={{width: "75%"}}/>
+				<span className="card-spot-name">{this.props.card && !this.props.card.dead ? this.props.card.name : ""}</span>
+				<img src={this.props.card && !this.props.card.dead ? "images/" + this.props.card.image : img} className="card-spot-img"/>
 				<div>
-					<span style={{margin: "0px", float: "left"}}>{this.props.card && !this.props.card.dead ? this.props.card.hp : ""}</span>
-					<span style={{margin: "0px", float: "right"}}>{this.props.card && !this.props.card.dead ? this.props.card.atk : ""}</span>
+					<span className="card-spot-hp">{this.props.card && !this.props.card.dead ? this.props.card.hp : ""}</span>
+					<span className="card-spot-atk">{this.props.card && !this.props.card.dead ? this.props.card.atk : ""}</span>
 				</div>
 			</center>
 			</div>

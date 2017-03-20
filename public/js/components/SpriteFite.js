@@ -24,7 +24,7 @@ class SpriteFite extends React.Component {
 			content = null;
 
 		return (
-			<div style={{width: "100%", height: "100%"}}>
+			<div id="sprite-fite-div">
 				{content}
 			</div>
 		);

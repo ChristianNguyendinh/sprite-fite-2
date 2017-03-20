@@ -4,12 +4,7 @@
   
 ### TODO:  
 - favicon :)   
-- replace the long import in game rework with an import all as <name> then reference the methods with dot notation
-- organization of files  
-- Move inline css to css file
 - LOTS OF STYLE zzz  
-- Separate components  
-- clean up  
   
 --- later ---  
   
